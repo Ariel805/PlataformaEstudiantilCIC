@@ -8,8 +8,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #1d4f91;
-      --secondary-color: #e0f7fa;
+      --primary-color: #1d3557;
+      --secondary-color: #457b9d;
       --accent-color: #0288d1;
       --text-color: #FFFFFF;
       --light-color: #f0f8ff;
@@ -70,62 +70,116 @@
       margin-top: 30px;
       border-radius: 20px 20px 0 0;
     }
+    .teacher-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid var(--secondary-color);
+    }
+    .teacher-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .teacher-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+    }
+    .section-title {
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <header class="header">
     <h1>Plataforma Estudiantil 6A</h1>
-    <p>Accede a tus calificaciones, horarios y más</p>
+    <p>Herramientas digitales y recursos para tu curso</p>
   </header>
   <div class="container py-5">
-    <div class="row g-4">
+    <div class="row g-4 mb-5">
       <div class="col-md-4">
-        <div class="card text-center">
+        <div class="card text-center h-100">
           <div class="card-body">
-            <i class="fas fa-file-alt fa-4x mb-3"></i>
-            <h5 class="card-title">Calificaciones</h5>
-            <p class="card-text">Consulta tus calificaciones de manera rápida y sencilla.</p>
-            <button class="btn btn-primary">Ver Calificaciones</button>
+            <i class="fas fa-chalkboard fa-4x mb-3"></i>
+            <h5 class="card-title">Pizarra Digital</h5>
+            <p class="card-text">Colabora en tiempo real con tus compañeros y profesores.</p>
+            <button class="btn btn-primary" onclick="alert('Funcionalidad de pizarra digital próximamente disponible.')">Abrir Pizarra</button>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card text-center">
+        <div class="card text-center h-100">
           <div class="card-body">
-            <i class="fas fa-calendar-alt fa-4x mb-3"></i>
-            <h5 class="card-title">Horario</h5>
-            <p class="card-text">Revisa tu horario de clases actualizado.</p>
-            <button class="btn btn-primary">Ver Horario</button>
+            <i class="fas fa-desktop fa-4x mb-3"></i>
+            <h5 class="card-title">Compartir Pantalla</h5>
+            <p class="card-text">Comparte tu pantalla para presentaciones y trabajo colaborativo.</p>
+            <button class="btn btn-primary" onclick="alert('Funcionalidad de compartir pantalla próximamente disponible.')">Compartir Pantalla</button>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card text-center">
+        <div class="card text-center h-100">
           <div class="card-body">
-            <i class="fas fa-chalkboard-teacher fa-4x mb-3"></i>
-            <h5 class="card-title">Profesores</h5>
-            <p class="card-text">Conoce a tus profesores y sus asignaturas.</p>
-            <button class="btn btn-primary">Ver Profesores</button>
+            <i class="fas fa-folder-open fa-4x mb-3"></i>
+            <h5 class="card-title">Kardex Digital</h5>
+            <p class="card-text">Consulta tu kardex digital con tus avances y registros académicos.</p>
+            <button class="btn btn-primary" onclick="alert('Funcionalidad de kardex digital próximamente disponible.')">Ver Kardex</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Sección de PDFs -->
-    <div class="mt-5">
-      <h2 class="text-center mb-4">Materiales del Curso</h2>
-      <div class="row">
-        <div class="col-md-6">
-          <h4>Cronograma</h4>
-          <div id="cronograma-container" class="mb-3">
-            <!-- Los PDFs de cronograma se cargarán aquí -->
-          </div>
+    <h2 class="section-title">Conoce a tus docentes</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Alexander Aliaga" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Alexander Aliaga</h5>
+          <p class="mb-0">Matemáticas</p>
         </div>
-        <div class="col-md-6">
-          <h4>Lista de Útiles</h4>
-          <div id="lista-utiles-container" class="mb-3">
-            <!-- Los PDFs de lista de útiles se cargarán aquí -->
-          </div>
+      </div>
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Huaycho Amalia" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Huaycho Amalia</h5>
+          <p class="mb-0">Comunicación y Lenguajes</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Santos Casas" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Santos Casas</h5>
+          <p class="mb-0">Biología</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Freddy Quispe" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Freddy Quispe</h5>
+          <p class="mb-0">Historia</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Henry Salazar" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Henry Salazar</h5>
+          <p class="mb-0">Inglés</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Lic. Edwin Carvajal" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Edwin Carvajal</h5>
+          <p class="mb-0">Educación Física</p>
         </div>
       </div>
     </div>
@@ -133,30 +187,5 @@
   <footer class="footer">
     <p>&copy; 2025 Colegio Inglés Católico. Todos los derechos reservados.</p>
   </footer>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const course = '6A';
-
-      // Cargar PDFs
-      async function loadPdfs(section, containerId) {
-        try {
-          const response = await fetch(`/api/get-pdfs?course=${course}&section=${section}`);
-          const pdfs = await response.json();
-          const container = document.getElementById(containerId);
-          container.innerHTML = pdfs.map(pdf => `
-            <div class="mb-2">
-              <a href="/uploads/${pdf.filename}" target="_blank">${pdf.originalName}</a>
-            </div>
-          `).join('');
-        } catch (error) {
-          console.error('Error al cargar PDFs:', error);
-        }
-      }
-
-      loadPdfs('cronograma', 'cronograma-container');
-      loadPdfs('lista-utiles', 'lista-utiles-container');
-    });
-  </script>
 </body>
 </html>
