@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Sesión - Estudiantes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1d4f91;
+      --secondary-color: #e0f7fa;
+      --accent-color: #0288d1;
+      --text-color: #FFFFFF;
+      --light-color: #f0f8ff;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: #212529;
+      background: url("imagenes/fondologin.jpeg") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      font-size: 1.1rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+    }
+    .btn-primary:hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h3 class="text-center mb-4">Inicio de Sesión - Estudiantes</h3>
+    <form id="studentLoginForm">
+      <div class="mb-3">
+        <label for="studentUsername" class="form-label">Usuario</label>
+        <input type="text" class="form-control" id="studentUsername" required>
+      </div>
+      <div class="mb-3 position-relative">
+        <label for="studentPassword" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="studentPassword" required>
+        <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2" id="toggleStudentPassword">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="mb-3">
+        <label for="studentCourse" class="form-label">Curso</label>
+        <select class="form-select" id="studentCourse" required>
+          <option value="" disabled selected>Seleccionar curso</option>
+          <option value="6A">6A</option>
+          <option value="6B">6B</option>
+          <option value="6C">6C</option>
+        </select>
+      </div>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const emergencyAccounts = [
+        { username: 'AndresGutierrez', password: 'andres123', course: '6A' },
+        { username: 'AlejandroAliaga', password: 'alejandro1111', course: '6B' },
+        { username: 'AlvaroMontecinos', password: 'alvaroXY', course: '6C' },
+      ];
+
+      document.getElementById('studentLoginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('studentUsername').value;
+        const password = document.getElementById('studentPassword').value;
+        const course = document.getElementById('studentCourse').value;
+
+        const validAccount = emergencyAccounts.find(
+          (account) =>
+            account.username === username &&
+            account.password === password &&
+            account.course === course
+        );
+
+        if (validAccount) {
+          alert(`Bienvenido, ${username} del curso ${course}!`);
+          window.location.href = `plataforma_${course}.html`;
+        } else {
+          alert('Usuario, contraseña o curso incorrectos.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

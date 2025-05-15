@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Panel de Administración - CIC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+      :root {
+        --primary-color: #1d4f91; /* deeper blue */
+        --secondary-color: #e0f7fa; /* light blue */
+        --accent-color: #0288d1; /* vibrant blue */
+        --text-color: #FFFFFF;
+        --light-color: #e0f7fa;
+      }
+      body {
+        font-family: 'Roboto', sans-serif;
+        color: #212529;
+        background-color: #f0f8ff;
+      }
+      .navbar-custom {
+        background-color: var(--primary-color);
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: white;
+      }
+      .navbar-custom .nav-link:hover {
+        color: var(--secondary-color);
+      }
+      .card {
+        transition: transform 0.3s;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        color: #212529;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+      }
+      .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        font-size: 1.1rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+      }
+      .btn-primary:hover {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+      }
+      .section-heading {
+        position: relative;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+        color: var(--primary-color);
+      }
+      .section-heading:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background-color: var(--accent-color);
+      }
+      .announcement {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--primary-color);
+        color: #212529;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="imagenes/logocole.png" alt="Logo CIC" style="height: 40px; margin-right: 10px;"> Panel de Administración - CIC
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#announcements">Anuncios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#upload-announcement">Subir Anuncio</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+      <!-- Welcome Section -->
+      <section id="welcome" class="mb-5">
+        <h2 class="section-heading">Bienvenido al Panel de Administración</h2>
+        <p>Este espacio está diseñado para profesores y administrativos del Colegio Inglés Católico. Aquí puedes gestionar anuncios y otras funciones administrativas.</p>
+      </section>
+
+      <!-- Announcements Section -->
+      <section id="announcements" class="mb-5">
+        <h2 class="section-heading">Anuncios Públicos</h2>
+        <div id="announcements-container">
+          <!-- Los anuncios se cargarán dinámicamente aquí -->
+        </div>
+      </section>
+
+      <!-- Upload Announcement Section -->
+      <section id="upload-announcement" class="mb-5">
+        <h2 class="section-heading">Subir Nuevo Anuncio</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="uploadAnnouncementForm">
+              <div class="mb-3">
+                <label for="announcementTitle" class="form-label">Título del Anuncio</label>
+                <input type="text" class="form-control" id="announcementTitle" required>
+              </div>
+              <div class="mb-3">
+                <label for="announcementContent" class="form-label">Contenido del Anuncio</label>
+                <textarea class="form-control" id="announcementContent" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Publicar Anuncio</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Upload Course PDFs Section -->
+      <section id="upload-course-pdfs" class="mb-5">
+        <h2 class="section-heading">Subir Material para Cursos</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="uploadPdfForm">
+              <div class="mb-3">
+                <label for="pdfCourse" class="form-label">Curso</label>
+                <select class="form-select" id="pdfCourse" required>
+                  <option value="" disabled selected>Seleccionar curso</option>
+                  <option value="6A">6A</option>
+                  <option value="6B">6B</option>
+                  <option value="6C">6C</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="pdfSection" class="form-label">Sección</label>
+                <select class="form-select" id="pdfSection" required>
+                  <option value="" disabled selected>Seleccionar sección</option>
+                  <option value="cronograma">Cronograma</option>
+                  <option value="lista-utiles">Lista de Útiles</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="pdfFile" class="form-label">Archivo PDF</label>
+                <input type="file" class="form-control" id="pdfFile" accept="application/pdf" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Subir PDF</button>
+            </form>
+
+            <script>
+              document.getElementById('uploadPdfForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append('course', document.getElementById('pdfCourse').value);
+                formData.append('section', document.getElementById('pdfSection').value);
+                formData.append('pdf', document.getElementById('pdfFile').files[0]);
+
+                try {
+                  const response = await fetch('/api/upload-pdf', {
+                    method: 'POST',
+                    body: formData,
+                  });
+
+                  if (response.ok) {
+                    alert('PDF subido exitosamente.');
+                    document.getElementById('uploadPdfForm').reset();
+                  } else {
+                    alert('Error al subir el PDF.');
+                  }
+                } catch (error) {
+                  console.error('Error al subir PDF:', error);
+                  alert('Error al subir el PDF.');
+                }
+              });
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <!-- Miro Integration Section -->
+      <section id="miro-integration" class="mb-5">
+        <h2 class="section-heading">Crear y Compartir Pizarra Digital</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="miroBoardForm">
+              <div class="mb-3">
+                <label for="miroCourseSelect" class="form-label">Seleccionar Curso</label>
+                <select class="form-select" id="miroCourseSelect" required>
+                  <option value="">Seleccionar curso</option>
+                  <option value="1A">1A</option>
+                  <option value="1B">1B</option>
+                  <option value="2A">2A</option>
+                  <option value="2B">2B</option>
+                  <option value="3A">3A</option>
+                  <option value="3B">3B</option>
+                  <!-- Agregar más cursos según sea necesario -->
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="miroBoardLink" class="form-label">Enlace de la Pizarra Digital (Miro)</label>
+                <input type="url" class="form-control" id="miroBoardLink" placeholder="https://miro.com/app/board/..." required>
+              </div>
+              <button type="submit" class="btn btn-primary">Compartir Pizarra</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+      <div class="container">
+        <div class="text-center">
+          <p>&copy; 2025 Colegio Inglés Católico. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        // Load existing announcements
+        function loadAnnouncements() {
+          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+          const container = $('#announcements-container');
+          container.empty();
+          announcements.forEach((announcement, index) => {
+            container.append(`
+              <div class="announcement">
+                <h4>${announcement.title}</h4>
+                <p>${announcement.content}</p>
+                <button class="btn btn-sm btn-danger delete-announcement" data-index="${index}">Eliminar</button>
+              </div>
+            `);
+          });
+        }
+
+        // Handle announcement upload
+        $('#uploadAnnouncementForm').on('submit', function(e) {
+          e.preventDefault();
+          const title = $('#announcementTitle').val();
+          const content = $('#announcementContent').val();
+          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+          announcements.push({ title, content });
+          localStorage.setItem('announcements', JSON.stringify(announcements));
+          loadAnnouncements();
+          alert('Anuncio publicado exitosamente.');
+          $('#uploadAnnouncementForm')[0].reset();
+        });
+
+        // Handle announcement deletion
+        $(document).on('click', '.delete-announcement', function() {
+          const index = $(this).data('index');
+          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+          if (confirm('¿Estás seguro de que deseas eliminar este anuncio?')) {
+            announcements.splice(index, 1);
+            localStorage.setItem('announcements', JSON.stringify(announcements));
+            loadAnnouncements();
+          }
+        });
+
+        // Handle course-specific PDF upload with category
+        $('#uploadCoursePdfForm').on('submit', function(e) {
+          e.preventDefault();
+          const course = $('#courseSelect').val();
+          const category = $('#pdfCategory').val();
+          const fileInput = document.getElementById('coursePdf');
+          if (!course || !category || fileInput.files.length === 0) {
+            alert('Por favor selecciona un curso, una categoría y un archivo PDF.');
+            return;
+          }
+
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const base64Data = event.target.result.split(',')[1];
+            const coursePdfs = JSON.parse(localStorage.getItem('coursePdfs')) || {};
+            if (!coursePdfs[course]) {
+              coursePdfs[course] = { material: [], horario: [], calificaciones: [] };
+            }
+            coursePdfs[course][category].push({ name: file.name, data: base64Data });
+            localStorage.setItem('coursePdfs', JSON.stringify(coursePdfs));
+            alert(`PDF subido exitosamente para el curso ${course} en la categoría ${category}.`);
+            $('#uploadCoursePdfForm')[0].reset();
+          };
+          reader.readAsDataURL(file);
+        });
+
+        // Handle Miro board sharing
+        $('#miroBoardForm').on('submit', function(e) {
+          e.preventDefault();
+          const course = $('#miroCourseSelect').val();
+          const boardLink = $('#miroBoardLink').val();
+          if (!course || !boardLink) {
+            alert('Por favor selecciona un curso y proporciona un enlace válido de Miro.');
+            return;
+          }
+
+          const miroBoards = JSON.parse(localStorage.getItem('miroBoards')) || {};
+          if (!miroBoards[course]) {
+            miroBoards[course] = [];
+          }
+          miroBoards[course].push({ link: boardLink });
+          localStorage.setItem('miroBoards', JSON.stringify(miroBoards));
+
+          // Send notification to students of the selected course
+          const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
+          if (!notifications[course]) {
+            notifications[course] = [];
+          }
+          notifications[course].push({
+            message: `Se ha compartido una nueva pizarra digital para tu curso. <a href="${boardLink}" target="_blank">Haz clic aquí para acceder</a>.`,
+            timestamp: new Date().toISOString()
+          });
+          localStorage.setItem('notifications', JSON.stringify(notifications));
+
+          alert(`Pizarra digital compartida exitosamente con el curso ${course}.`);
+          $('#miroBoardForm')[0].reset();
+        });
+
+        // Initial load of announcements
+        loadAnnouncements();
+      });
+    </script>
+    <script>
+      document.getElementById('announcementForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById('announcementTitle').value;
+        const content = document.getElementById('announcementContent').value;
+        const date = new Date().toLocaleDateString();
+
+        const newAnnouncement = { title, content, date };
+
+        // Obtener anuncios existentes de localStorage
+        const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+        announcements.push(newAnnouncement);
+
+        // Guardar en localStorage
+        localStorage.setItem('announcements', JSON.stringify(announcements));
+
+        alert('Anuncio publicado exitosamente.');
+        document.getElementById('announcementForm').reset();
+      });
+    </script>
+  </body>
+</html>

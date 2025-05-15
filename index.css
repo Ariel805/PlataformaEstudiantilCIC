@@ -1,0 +1,327 @@
+/* Paleta de colores */
+:root {
+    --primary-color: #1d3557; /* Azul marino */
+    --secondary-color: #457b9d; /* Azul medio oscuro */
+    --accent-color: #0288d1; /* Azul vibrante */
+    --text-color: #FFFFFF;
+    --light-color: #f0f8ff; /* Fondo claro */
+}
+
+/* Estilos generales */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--light-color);
+    color: #212529;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Estilo para la barra de navegación oculta */
+#navbar {
+    transition: top 0.3s ease-in-out;
+}
+
+/* Animaciones */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.aparecer {
+    animation: aparecer 1s ease-in-out;
+}
+
+.slide-in-left {
+    animation: slideInLeft 1s ease-in-out;
+}
+
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.bounce {
+    animation: bounce 2s infinite;
+}
+
+.zoom-in {
+    animation: zoomIn 1s ease-in-out;
+}
+
+/* Mejora visual para imágenes */
+.imagen-epica {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imagen-epica:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Carrusel */
+.carousel {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+}
+
+.carousel-track {
+    display: flex;
+    width: calc(100% * 6); /* 6 imágenes */
+}
+
+/* Animación del carrusel */
+@keyframes slide {
+    0%    { transform: translateX(0%); }
+    16.66% { transform: translateX(-100%); }
+    33.33% { transform: translateX(-200%); }
+    50%    { transform: translateX(-300%); }
+    66.66% { transform: translateX(-400%); }
+    83.33% { transform: translateX(-500%); }
+    100%   { transform: translateX(0%); }
+}
+
+/* Centrar y estilizar la barra de herramientas */
+.navbar-custom {
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.navbar-custom .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+}
+
+.navbar-custom .navbar-nav .nav-link {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: var(--secondary-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-size: 1.1rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    font-size: 1.1rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Botones blancos */
+.btn-white {
+    background-color: #ffffff;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-white:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.footer {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 20px 0;
+}
+
+/* Carrusel */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+}
+
+.carousel-button.prev {
+    left: 10px;
+}
+
+.carousel-button.next {
+    right: 10px;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Carrusel de ancho completo */
+.carousel-container.full-width {
+    width: 100vw; /* Ocupa todo el ancho de la ventana */
+    margin: 0; /* Elimina márgenes */
+    border-radius: 0; /* Elimina bordes redondeados */
+}
+
+.carousel-image {
+    width: 100vw; /* Asegura que las imágenes ocupen todo el ancho */
+    height: auto;
+    object-fit: cover;
+}
+
+/* Estilos para los anuncios */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(10, 3, 105, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Títulos de los anuncios */
+.card-title {
+    font-size: 1.25rem; /* Tamaño original */
+    font-weight: bold; /* Negrita */
+    color: var(--secondary-color); /* Azul medio oscuro */
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.card-text {
+    font-size: 1rem; /* Tamaño original */
+    color: #212529; /* Color original */
+}
