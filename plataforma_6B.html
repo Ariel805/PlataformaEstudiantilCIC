@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plataforma Estudiantil 6B</title>
+  <title>Synapse CIC 6B</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -101,13 +101,13 @@
 </head>
 <body>
   <header class="header">
-    <h1>Plataforma Estudiantil 6B</h1>
+  <h1>Synapse CIC 6B</h1>
     <p>Herramientas digitales y recursos para tu curso</p>
   </header>
   <div class="container py-5">
-    <div class="row g-4 mb-5">
-      <div class="col-md-4">
-        <div class="card text-center h-100">
+    <div class="row g-4 mb-5 justify-content-center">
+      <div class="col-md-4 d-flex justify-content-center">
+        <div class="card text-center h-100 w-100" style="max-width:340px;">
           <div class="card-body">
             <i class="fas fa-chalkboard fa-4x mb-3"></i>
             <h5 class="card-title">Pizarra Digital</h5>
@@ -116,8 +116,8 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-center h-100">
+      <div class="col-md-4 d-flex justify-content-center">
+        <div class="card text-center h-100 w-100" style="max-width:340px;">
           <div class="card-body">
             <i class="fas fa-desktop fa-4x mb-3"></i>
             <h5 class="card-title">Compartir Pantalla</h5>
@@ -126,65 +126,77 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card text-center h-100">
-          <div class="card-body">
-            <i class="fas fa-folder-open fa-4x mb-3"></i>
-            <h5 class="card-title">Kardex Digital</h5>
-            <p class="card-text">Consulta tu kardex digital con tus avances y registros académicos.</p>
-            <button class="btn btn-primary" onclick="alert('Funcionalidad de kardex digital próximamente disponible.')">Ver Kardex</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <h2 class="section-title">Conoce a tus docentes</h2>
     <div class="row justify-content-center">
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('matematicas')">
           <img src="imagenes/profesor.png" alt="Lic. Alexander Aliaga" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Alexander Aliaga</h5>
           <p class="mb-0">Matemáticas</p>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('lenguaje')">
           <img src="imagenes/profesor.png" alt="Lic. Huaycho Amalia" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Huaycho Amalia</h5>
           <p class="mb-0">Comunicación y Lenguajes</p>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('otro')">
           <img src="imagenes/profesor.png" alt="Lic. Santos Casas" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Santos Casas</h5>
           <p class="mb-0">Biología</p>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('otro')">
           <img src="imagenes/profesor.png" alt="Lic. Freddy Quispe" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Freddy Quispe</h5>
           <p class="mb-0">Historia</p>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('otro')">
           <img src="imagenes/profesor.png" alt="Lic. Henry Salazar" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Henry Salazar</h5>
           <p class="mb-0">Inglés</p>
         </div>
       </div>
       <div class="col-md-3">
-        <div class="teacher-card">
+        <div class="teacher-card" style="cursor:pointer" onclick="mostrarVideosApoyo('otro')">
           <img src="imagenes/profesor.png" alt="Lic. Edwin Carvajal" class="teacher-img">
           <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Edwin Carvajal</h5>
           <p class="mb-0">Educación Física</p>
         </div>
       </div>
     </div>
+    <!-- Sección Videos de Apoyo -->
+    <div id="videosApoyo" style="display:none; margin: 2rem auto; max-width: 900px;">
+      <div class="card" style="padding:1.5rem;">
+        <h3 class="section-title">Videos de Apoyo</h3>
+        <div id="iframeVideosApoyo" style="margin-top:2rem; min-height:400px;"></div>
+      </div>
+    </div>
   </div>
   <footer class="footer">
     <p>&copy; 2025 Colegio Inglés Católico. Todos los derechos reservados.</p>
   </footer>
+  <script>
+    function mostrarVideosApoyo(docente) {
+      const seccion = document.getElementById('videosApoyo');
+      const cont = document.getElementById('iframeVideosApoyo');
+      seccion.style.display = 'block';
+      if (docente === 'matematicas') {
+        cont.innerHTML = `<iframe src="https://widget.tagembed.com/290760?website=1" style="width:100%;height:400px;overflow:auto;border:none;"></iframe>`;
+      } else if (docente === 'lenguaje' || docente === 'comunicacion') {
+        cont.innerHTML = `<iframe src="https://widget.tagembed.com/290762?website=1" style="width:100%;height:400px;overflow:auto;border:none;"></iframe>`;
+      } else {
+        cont.innerHTML = `<div class='alert alert-info'>No hay videos de apoyo para este docente aún.</div>`;
+      }
+      seccion.scrollIntoView({behavior:'smooth'});
+    }
+  </script>
 </html>

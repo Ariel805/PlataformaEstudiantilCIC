@@ -81,7 +81,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <img src="imagenes/logocole.png" alt="Logo CIC" style="height: 40px; margin-right: 10px;"> Panel de Administración - CIC
+          <img src="imagenes/logoplat.png" alt="Logo Synapse CIC" style="height: 40px; margin-right: 10px;"> Synapse CIC - Administración
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -242,7 +242,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
-        // Load existing announcements
+        
         function loadAnnouncements() {
           const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
           const container = $('#announcements-container');
@@ -258,7 +258,7 @@
           });
         }
 
-        // Handle announcement upload
+        
         $('#uploadAnnouncementForm').on('submit', function(e) {
           e.preventDefault();
           const title = $('#announcementTitle').val();
@@ -271,7 +271,7 @@
           $('#uploadAnnouncementForm')[0].reset();
         });
 
-        // Handle announcement deletion
+        
         $(document).on('click', '.delete-announcement', function() {
           const index = $(this).data('index');
           const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
@@ -282,7 +282,7 @@
           }
         });
 
-        // Handle course-specific PDF upload with category
+        
         $('#uploadCoursePdfForm').on('submit', function(e) {
           e.preventDefault();
           const course = $('#courseSelect').val();
@@ -309,7 +309,7 @@
           reader.readAsDataURL(file);
         });
 
-        // Handle Miro board sharing
+        
         $('#miroBoardForm').on('submit', function(e) {
           e.preventDefault();
           const course = $('#miroCourseSelect').val();
@@ -326,7 +326,7 @@
           miroBoards[course].push({ link: boardLink });
           localStorage.setItem('miroBoards', JSON.stringify(miroBoards));
 
-          // Send notification to students of the selected course
+          
           const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
           if (!notifications[course]) {
             notifications[course] = [];
@@ -341,7 +341,7 @@
           $('#miroBoardForm')[0].reset();
         });
 
-        // Initial load of announcements
+        
         loadAnnouncements();
       });
     </script>
@@ -355,11 +355,11 @@
 
         const newAnnouncement = { title, content, date };
 
-        // Obtener anuncios existentes de localStorage
+        
         const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
         announcements.push(newAnnouncement);
 
-        // Guardar en localStorage
+        
         localStorage.setItem('announcements', JSON.stringify(announcements));
 
         alert('Anuncio publicado exitosamente.');
