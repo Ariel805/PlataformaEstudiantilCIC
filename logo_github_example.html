@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ejemplo logo desde GitHub RAW</title>
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Arial;padding:24px;background:#f7fafc} .card{background:white;padding:20px;border-radius:12px;max-width:820px;margin:24px auto;box-shadow:0 8px 30px rgba(2,6,23,0.08)} img{max-width:320px;height:auto;display:block;margin:12px 0}</style>
+</head>
+<body>
+  <div class="card">
+    <h2>Ejemplo: cómo referenciar el logo subido a GitHub (RAW)</h2>
+    <p>Para que la etiqueta &lt;img&gt; use la imagen que subas al repo en la carpeta <code>imagenes/</code>, forma la URL "raw" así:</p>
+    <pre>https://raw.githubusercontent.com/&lt;TU-USUARIO&gt;/&lt;TU-REPO&gt;/&lt;RAMA&gt;/imagenes/synapselogo.png</pre>
+    <p>Reemplaza &lt;TU-USUARIO&gt;, &lt;TU-REPO&gt; y &lt;RAMA&gt; (por ejemplo <code>main</code> o <code>master</code>).</p>
+    <p>Ejemplo (sustituye por tus valores):</p>
+    <code>https://raw.githubusercontent.com/miusuario/mirepo/main/imagenes/synapselogo.png</code>
+
+    <h3>Vista previa (si ya subiste la imagen):</h3>
+    <!-- Sustituye la URL de ejemplo por la real después de subir -->
+    <img id="logoPreview" src="https://raw.githubusercontent.com/<TU-USUARIO>/<TU-REPO>/<RAMA>/imagenes/synapselogo.png" alt="Logo desde GitHub RAW" onerror="this.style.display='none'">
+
+    <p id="note" style="color:#666">Si ves la imagen —¡perfecto!—. Si no, revisa que la ruta sea exactamente la misma (GitHub diferencia mayúsculas) y que la imagen exista en la rama indicada.</p>
+  </div>
+</body>
+</html>
