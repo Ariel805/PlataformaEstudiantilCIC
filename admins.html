@@ -74,6 +74,54 @@
         border-left: 4px solid var(--primary-color);
         color: #212529;
       }
+      /* Sidebar tools */
+      #adminSidebar {
+        position: fixed;
+        left: 16px;
+        top: 70px;
+        width: 220px;
+        max-height: calc(100vh - 90px);
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        padding: 10px;
+        z-index: 1050;
+      }
+      #adminSidebar .tool-item { display:flex; align-items:center; gap:10px; padding:8px; border-radius:6px; cursor:pointer; color:#212529; }
+      #adminSidebar .tool-item:hover { background: #f1f7fb; }
+      #adminSidebar .tool-item.active { background: var(--primary-color); color: #fff; }
+      #adminSidebar .tool-item .fa { width:20px; text-align:center; }
+
+      /* make room for sidebar on wider screens */
+      @media(min-width: 992px){
+        .main-with-sidebar { margin-left: 260px; }
+      }
+      /* hide sidebar on small screens */
+      @media(max-width: 991px){
+        #adminSidebar { display:none; }
+      }
+      /* Toggle button for sidebar */
+      .sidebar-toggle {
+        position: fixed;
+        left: 244px; /* aligned to right edge of sidebar */
+        top: 80px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        cursor: pointer;
+        z-index: 1200;
+        transition: left 0.18s, transform 0.18s;
+      }
+      #adminSidebar.collapsed { transform: translateX(-240px); }
+      body.sidebar-collapsed .main-with-sidebar { margin-left: 16px; }
+      body.sidebar-collapsed .sidebar-toggle { left: 16px; transform: rotate(180deg); }
     </style>
   </head>
   <body>
@@ -81,7 +129,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <img src="imagenes/logoplat.png" alt="Logo Synapse CIC" style="height: 40px; margin-right: 10px;"> Synapse CIC - Administración
+          <img src="imagenes/logoplat-removebg-preview.png" alt="Logo Synapse CIC" style="height: 40px; margin-right: 10px;"> Synapse CIC - Administración
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -94,109 +142,191 @@
             <li class="nav-item">
               <a class="nav-link" href="#announcements">Anuncios</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#upload-announcement">Subir Anuncio</a>
-            </li>
           </ul>
         </div>
       </div>
     </nav>
 
+    <!-- Sidebar tools -->
+    <div id="adminSidebar" aria-label="Barra de herramientas administrativas">
+      <!-- items populated by script -->
+    </div>
+    <button id="sidebarToggle" class="sidebar-toggle" aria-label="Alternar barra de herramientas"><i class="fa fa-chevron-left"></i></button>
+
     <!-- Main Content -->
-    <div class="container py-5">
+    <div class="container py-5 main-with-sidebar">
       <!-- Welcome Section -->
       <section id="welcome" class="mb-5">
         <h2 class="section-heading">Bienvenido al Panel de Administración</h2>
         <p>Este espacio está diseñado para profesores y administrativos del Colegio Inglés Católico. Aquí puedes gestionar anuncios y otras funciones administrativas.</p>
       </section>
 
+      <!-- Support Videos Section -->
+      <section id="support-videos" class="mb-5">
+        <h2 class="section-heading">Videos de Apoyo — Gestión</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="supportVideoForm">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="svTeacherSelect" class="form-label">Nombre del docente</label>
+                  <select id="svTeacherSelect" class="form-select" required>
+                    <option value="" disabled selected>Seleccionar docente</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="svAreaSelect" class="form-label">Área / Asignatura</label>
+                  <select id="svAreaSelect" class="form-select" required>
+                    <option value="" disabled selected>Seleccionar área</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                  <label for="svCourse" class="form-label">Curso</label>
+                  <select id="svCourse" class="form-select" required>
+                    <option value="">Seleccionar</option>
+                    <option value="6A">6A</option>
+                    <option value="6B">6B</option>
+                    <option value="6C">6C</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="svLink" class="form-label">Enlace YouTube</label>
+                  <input id="svLink" type="url" class="form-control" placeholder="https://www.youtube.com/watch?v=..." required>
+                </div>
+              </div>
+              <input type="hidden" id="svEditId" value="">
+              <button type="submit" class="btn btn-primary">Guardar video</button>
+            </form>
+
+            <hr>
+            <h6>Videos registrados</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped" id="supportVideosTable">
+                <thead><tr><th>#</th><th>Docente</th><th>Área</th><th>Curso</th><th>Enlace</th><th>Acciones</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Deportes Section -->
+      <section id="deportes" class="mb-5">
+        <h2 class="section-heading">Deportes — Gestión rápida</h2>
+        <div class="card">
+          <div class="card-body">
+            <p>Panel provisional para gestionar equipos, jugadores, resultados y la tabla de posiciones. Funciona offline (localStorage) y tratará de sincronizar con la API si está disponible.</p>
+
+            <div class="row">
+              <div class="col-md-4">
+                <h5>Equipos</h5>
+                <ul id="teamsList" class="list-group mb-3"></ul>
+                <form id="teamForm" class="mb-3">
+                  <div class="input-group">
+                    <input id="teamName" class="form-control" placeholder="Nombre del equipo" required>
+                    <button class="btn btn-primary" type="submit">Agregar</button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-4">
+                <h5>Jugadores</h5>
+                <select id="playerTeamSelect" class="form-select mb-2"><option value="">Seleccionar equipo</option></select>
+                <ul id="playersList" class="list-group mb-3"></ul>
+                <form id="playerAddForm">
+                  <div class="input-group">
+                    <input id="playerName" class="form-control" placeholder="Nombre del jugador" required>
+                    <button class="btn btn-primary" type="submit">Agregar</button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-4">
+                <h5>Resultados (Registrar partido)</h5>
+                <form id="matchForm">
+                  <div class="mb-2">
+                    <select id="matchHome" class="form-select" required><option value="">Equipo local</option></select>
+                  </div>
+                  <div class="mb-2">
+                    <select id="matchAway" class="form-select" required><option value="">Equipo visitante</option></select>
+                  </div>
+                  <div class="mb-2 input-group">
+                    <input id="scoreHome" type="number" min="0" class="form-control" placeholder="Goles local" required>
+                    <input id="scoreAway" type="number" min="0" class="form-control" placeholder="Goles visitante" required>
+                  </div>
+                  <div class="mb-2">
+                    <input id="matchDate" type="date" class="form-control">
+                  </div>
+                  <button class="btn btn-primary" type="submit">Registrar Resultado</button>
+                </form>
+                <hr>
+                <button id="syncSports" class="btn btn-outline-success mt-2">Sincronizar con servidor (si está disponible)</button>
+              </div>
+            </div>
+
+            <hr>
+            <h5>Tabla de Posiciones</h5>
+            <div style="margin-bottom:8px;">
+              <button id="clearStandingsBtn" class="btn btn-sm btn-danger">Vaciar tabla</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped" id="standingsTable">
+                <thead>
+                  <tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th><th>G</th><th>GC</th><th>D</th><th>GF</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Announcements Section -->
       <section id="announcements" class="mb-5">
         <h2 class="section-heading">Anuncios Públicos</h2>
-        <div id="announcements-container">
-          <!-- Los anuncios se cargarán dinámicamente aquí -->
-        </div>
-      </section>
-
-      <!-- Upload Announcement Section -->
-      <section id="upload-announcement" class="mb-5">
-        <h2 class="section-heading">Subir Nuevo Anuncio</h2>
         <div class="card">
           <div class="card-body">
-            <form id="uploadAnnouncementForm">
-              <div class="mb-3">
-                <label for="announcementTitle" class="form-label">Título del Anuncio</label>
-                <input type="text" class="form-control" id="announcementTitle" required>
+            <div class="row">
+              <div class="col-md-6">
+                <h6>Anuncios publicados</h6>
+                <div class="table-responsive mb-2">
+                  <table class="table table-sm table-striped" id="announcementsTable">
+                    <thead><tr><th>#</th><th>Título</th><th>Contenido</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <button id="downloadAnnouncementsLogPdf" class="btn btn-outline-secondary">Descargar registro (PDF)</button>
               </div>
-              <div class="mb-3">
-                <label for="announcementContent" class="form-label">Contenido del Anuncio</label>
-                <textarea class="form-control" id="announcementContent" rows="5" required></textarea>
+              <div class="col-md-6">
+                <h6>Subir / Editar anuncio</h6>
+                <form id="uploadAnnouncementForm">
+                  <div class="mb-3">
+                    <label for="announcementTitle" class="form-label">Título del Anuncio</label>
+                    <input type="text" class="form-control" id="announcementTitle" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="announcementContent" class="form-label">Contenido del Anuncio</label>
+                    <textarea class="form-control" id="announcementContent" rows="5" required></textarea>
+                  </div>
+                  <input type="hidden" id="announcementEditId" value="">
+                  <button type="submit" class="btn btn-primary">Publicar Anuncio</button>
+                  <button type="button" id="cancelAnnouncementEdit" class="btn btn-outline-secondary ms-2">Cancelar</button>
+                </form>
+                <hr>
+                <h6>Registro de acciones (altas / bajas / modificaciones)</h6>
+                <div class="table-responsive">
+                  <table class="table table-sm table-striped" id="announcementsLogTable">
+                    <thead><tr><th>#</th><th>Fecha / Hora</th><th>Acción</th><th>ID</th><th>Título</th></tr></thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
               </div>
-              <button type="submit" class="btn btn-primary">Publicar Anuncio</button>
-            </form>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Upload Course PDFs Section -->
-      <section id="upload-course-pdfs" class="mb-5">
-        <h2 class="section-heading">Subir Material para Cursos</h2>
-        <div class="card">
-          <div class="card-body">
-            <form id="uploadPdfForm">
-              <div class="mb-3">
-                <label for="pdfCourse" class="form-label">Curso</label>
-                <select class="form-select" id="pdfCourse" required>
-                  <option value="" disabled selected>Seleccionar curso</option>
-                  <option value="6A">6A</option>
-                  <option value="6B">6B</option>
-                  <option value="6C">6C</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="pdfSection" class="form-label">Sección</label>
-                <select class="form-select" id="pdfSection" required>
-                  <option value="" disabled selected>Seleccionar sección</option>
-                  <option value="cronograma">Cronograma</option>
-                  <option value="lista-utiles">Lista de Útiles</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="pdfFile" class="form-label">Archivo PDF</label>
-                <input type="file" class="form-control" id="pdfFile" accept="application/pdf" required>
-              </div>
-              <button type="submit" class="btn btn-primary">Subir PDF</button>
-            </form>
+      <!-- (Sección de 'Subir Nuevo Anuncio' eliminada: usar el panel de Anuncios existente) -->
 
-            <script>
-              document.getElementById('uploadPdfForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData();
-                formData.append('course', document.getElementById('pdfCourse').value);
-                formData.append('section', document.getElementById('pdfSection').value);
-                formData.append('pdf', document.getElementById('pdfFile').files[0]);
-
-                try {
-                  const response = await fetch('/api/upload-pdf', {
-                    method: 'POST',
-                    body: formData,
-                  });
-
-                  if (response.ok) {
-                    alert('PDF subido exitosamente.');
-                    document.getElementById('uploadPdfForm').reset();
-                  } else {
-                    alert('Error al subir el PDF.');
-                  }
-                } catch (error) {
-                  console.error('Error al subir PDF:', error);
-                  alert('Error al subir el PDF.');
-                }
-              });
-            </script>
-          </div>
-        </div>
-      </section>
+      <!-- (Sección 'Subir Material para Cursos' removida según solicitud) -->
 
       <!-- Miro Integration Section -->
       <section id="miro-integration" class="mb-5">
@@ -208,13 +338,9 @@
                 <label for="miroCourseSelect" class="form-label">Seleccionar Curso</label>
                 <select class="form-select" id="miroCourseSelect" required>
                   <option value="">Seleccionar curso</option>
-                  <option value="1A">1A</option>
-                  <option value="1B">1B</option>
-                  <option value="2A">2A</option>
-                  <option value="2B">2B</option>
-                  <option value="3A">3A</option>
-                  <option value="3B">3B</option>
-                  <!-- Agregar más cursos según sea necesario -->
+                  <option value="6A">6A</option>
+                  <option value="6B">6B</option>
+                  <option value="6C">6C</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -222,7 +348,111 @@
                 <input type="url" class="form-control" id="miroBoardLink" placeholder="https://miro.com/app/board/..." required>
               </div>
               <button type="submit" class="btn btn-primary">Compartir Pizarra</button>
+              <button id="downloadMiroLogPdf" type="button" class="btn btn-outline-secondary ms-2">Descargar registro (PDF)</button>
             </form>
+            <hr>
+            <h6>Registro de enlaces compartidos</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped" id="miroLogTable">
+                <thead>
+                  <tr><th>#</th><th>Fecha / Hora</th><th>Curso</th><th>Enlace</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Screen Sharing (TeamViewer) Integration Section -->
+      <section id="screen-integration" class="mb-5">
+        <h2 class="section-heading">Compartir Pantalla (TeamViewer) — Gestión</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="screenLinkForm">
+              <div class="mb-3">
+                <label for="screenCourseSelect" class="form-label">Seleccionar Curso</label>
+                <select class="form-select" id="screenCourseSelect" required>
+                  <option value="">Seleccionar curso</option>
+                  <option value="6A">6A</option>
+                  <option value="6B">6B</option>
+                  <option value="6C">6C</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="screenLinkInput" class="form-label">Enlace de Compartir Pantalla (TeamViewer / Zoom / Meet)</label>
+                <input type="url" class="form-control" id="screenLinkInput" placeholder="https://..." required>
+              </div>
+              <button type="submit" class="btn btn-primary">Compartir enlace</button>
+              <button id="downloadScreenLogPdf" type="button" class="btn btn-outline-secondary ms-2">Descargar registro (PDF)</button>
+            </form>
+            <hr>
+            <h6>Enlaces por curso</h6>
+            <div class="table-responsive mb-3">
+              <table class="table table-sm table-striped" id="screenLinksTable">
+                <thead>
+                  <tr><th>#</th><th>Curso</th><th>Enlace</th><th>Fecha / Hora</th><th>Acciones</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <h6>Registro central de acciones (altas / bajas / modificaciones)</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped" id="screenLogTable">
+                <thead>
+                  <tr><th>#</th><th>Fecha / Hora</th><th>Acción</th><th>Curso</th><th>Enlace</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Reunión Virtual (Google Meet) Integration Section -->
+      <section id="meet-integration" class="mb-5">
+        <h2 class="section-heading">Reunión Virtual (Google Meet) — Gestión</h2>
+        <div class="card">
+          <div class="card-body">
+            <form id="meetLinkForm">
+              <div class="mb-3">
+                <label for="meetCourseSelect" class="form-label">Seleccionar Curso</label>
+                <select class="form-select" id="meetCourseSelect" required>
+                  <option value="">Seleccionar curso</option>
+                  <option value="6A">6A</option>
+                  <option value="6B">6B</option>
+                  <option value="6C">6C</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="meetLinkInput" class="form-label">Enlace de Reunión (Google Meet)</label>
+                <input type="url" class="form-control" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Compartir enlace de reunión</button>
+              <button id="downloadMeetLogPdf" type="button" class="btn btn-outline-secondary ms-2">Descargar registro (PDF)</button>
+            </form>
+            <hr>
+            <h6>Enlaces de reunión por curso</h6>
+            <div class="table-responsive mb-3">
+              <table class="table table-sm table-striped" id="meetLinksTable">
+                <thead>
+                  <tr><th>#</th><th>Curso</th><th>Enlace</th><th>Fecha / Hora</th><th>Acciones</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <h6>Registro central de acciones (altas / bajas / modificaciones)</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped" id="meetLogTable">
+                <thead>
+                  <tr><th>#</th><th>Fecha / Hora</th><th>Acción</th><th>Curso</th><th>Enlace</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -240,47 +470,101 @@
     <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+  <!-- Libraries for PDF export of logs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // Sidebar: list of tools and behavior (smooth scroll + active highlight)
+    (function(){
+      const tools = [
+        { id: 'support-videos', label: 'Videos de Apoyo', icon: 'fa-video' },
+        { id: 'deportes', label: 'Deportes', icon: 'fa-futbol' },
+  { id: 'announcements', label: 'Anuncios', icon: 'fa-bullhorn' },
+  { id: 'miro-integration', label: 'Pizarra (Miro)', icon: 'fa-chalkboard' },
+        { id: 'screen-integration', label: 'Compartir Pantalla', icon: 'fa-desktop' },
+        { id: 'meet-integration', label: 'Reunión Virtual', icon: 'fa-video' }
+      ];
+
+      function buildSidebar(){
+        const root = document.getElementById('adminSidebar'); if(!root) return;
+        const ul = document.createElement('div'); ul.className = 'list-group';
+        tools.forEach(t=>{
+          const item = document.createElement('div'); item.className = 'tool-item'; item.setAttribute('data-target', t.id);
+          item.innerHTML = `<i class="fa ${t.icon}"></i><div>${t.label}</div>`;
+          item.addEventListener('click', ()=>{ const el = document.getElementById(t.id); if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); setActive(t.id); } });
+          ul.appendChild(item);
+        });
+        root.appendChild(ul);
+      }
+
+      function setActive(id){ document.querySelectorAll('#adminSidebar .tool-item').forEach(it=> it.classList.toggle('active', it.dataset.target===id)); }
+
+      // highlight on scroll
+      function onScroll(){
+        const fromTop = window.scrollY + 120; // offset to account for header
+        let current = null;
+        tools.forEach(t=>{ const el = document.getElementById(t.id); if(el && el.offsetTop <= fromTop) current = t.id; });
+        if(current) setActive(current);
+      }
+
+      // init
+      document.addEventListener('DOMContentLoaded', ()=>{ buildSidebar(); window.addEventListener('scroll', onScroll); onScroll(); });
+    })();
+  </script>
     <script>
       $(document).ready(function() {
         
-        function loadAnnouncements() {
-          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-          const container = $('#announcements-container');
-          container.empty();
-          announcements.forEach((announcement, index) => {
-            container.append(`
-              <div class="announcement">
-                <h4>${announcement.title}</h4>
-                <p>${announcement.content}</p>
-                <button class="btn btn-sm btn-danger delete-announcement" data-index="${index}">Eliminar</button>
-              </div>
-            `);
+        // Announcements: CRUD, logs and PDF export
+        function getAnnouncements(){ return JSON.parse(localStorage.getItem('announcements') || '[]'); }
+        function saveAnnouncements(arr){ localStorage.setItem('announcements', JSON.stringify(arr)); }
+
+        function getAnnouncementLogs(){ return JSON.parse(localStorage.getItem('announcements_log') || '[]'); }
+        function saveAnnouncementLogs(log){ localStorage.setItem('announcements_log', JSON.stringify(log)); }
+
+        function pushAnnouncementLog(action, id, title){ const log = getAnnouncementLogs(); log.push({ id: (log.length? log[log.length-1].id+1 : 1), action, announcementId: id, title, timestamp: new Date().toISOString() }); saveAnnouncementLogs(log); renderAnnouncementLogs(); }
+
+        function renderAnnouncementsTable(){
+          const arr = getAnnouncements(); const tbody = document.querySelector('#announcementsTable tbody'); tbody.innerHTML = '';
+          arr.forEach((a,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i+1}</td><td>${escapeHtml(a.title)}</td><td>${escapeHtml(a.content)}</td><td>${a.date||''}</td><td><button class="btn btn-sm btn-outline-primary btn-edit-ann" data-id="${a.id}">Editar</button> <button class="btn btn-sm btn-outline-danger btn-del-ann" data-id="${a.id}">Borrar</button></td>`;
+            tbody.appendChild(tr);
           });
+
+          // attach handlers
+          document.querySelectorAll('.btn-del-ann').forEach(btn=> btn.addEventListener('click', (e)=>{
+            if(!confirm('¿Eliminar este anuncio?')) return; const id = e.target.dataset.id;
+            let arr = getAnnouncements(); const idx = arr.findIndex(x=> String(x.id)===String(id)); if(idx>=0){ const removed = arr.splice(idx,1)[0]; saveAnnouncements(arr); pushAnnouncementLog('baja', removed.id, removed.title); renderAnnouncementsTable(); }
+          }));
+
+          document.querySelectorAll('.btn-edit-ann').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const id = e.target.dataset.id; const arr = getAnnouncements(); const item = arr.find(x=> String(x.id)===String(id)); if(!item) return;
+            document.getElementById('announcementTitle').value = item.title; document.getElementById('announcementContent').value = item.content; document.getElementById('announcementEditId').value = item.id; window.scrollTo({ top: 0, behavior: 'smooth' });
+          }));
         }
 
-        
-        $('#uploadAnnouncementForm').on('submit', function(e) {
-          e.preventDefault();
-          const title = $('#announcementTitle').val();
-          const content = $('#announcementContent').val();
-          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-          announcements.push({ title, content });
-          localStorage.setItem('announcements', JSON.stringify(announcements));
-          loadAnnouncements();
-          alert('Anuncio publicado exitosamente.');
-          $('#uploadAnnouncementForm')[0].reset();
+        function renderAnnouncementLogs(){ const log = getAnnouncementLogs(); const tbody = document.querySelector('#announcementsLogTable tbody'); tbody.innerHTML=''; log.forEach((r,i)=>{ const tr = document.createElement('tr'); tr.innerHTML = `<td>${i+1}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td>${r.action}</td><td>${r.announcementId||''}</td><td>${escapeHtml(r.title||'')}</td>`; tbody.appendChild(tr); }); }
+
+        // simple escaper to avoid injection on table render
+        function escapeHtml(str){ if(!str && str!=='') return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+        document.getElementById('uploadAnnouncementForm').addEventListener('submit', function(e){
+          e.preventDefault(); const title = document.getElementById('announcementTitle').value.trim(); const content = document.getElementById('announcementContent').value.trim(); if(!title||!content) { alert('Completa todos los campos.'); return; }
+          let arr = getAnnouncements(); const editId = document.getElementById('announcementEditId').value;
+          if(editId){ const idx = arr.findIndex(x=> String(x.id)===String(editId)); if(idx>=0){ arr[idx].title = title; arr[idx].content = content; arr[idx].updatedAt = new Date().toISOString(); pushAnnouncementLog('modificación', arr[idx].id, arr[idx].title); alert('Anuncio actualizado.'); } document.getElementById('announcementEditId').value = ''; }
+          else { const id = arr.length? (Math.max(...arr.map(x=>x.id))+1) : 1; const date = new Date().toLocaleString(); arr.unshift({ id, title, content, date, createdAt: new Date().toISOString() }); pushAnnouncementLog('alta', id, title); alert('Anuncio publicado exitosamente.'); }
+          saveAnnouncements(arr); this.reset(); renderAnnouncementsTable();
         });
 
-        
-        $(document).on('click', '.delete-announcement', function() {
-          const index = $(this).data('index');
-          const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-          if (confirm('¿Estás seguro de que deseas eliminar este anuncio?')) {
-            announcements.splice(index, 1);
-            localStorage.setItem('announcements', JSON.stringify(announcements));
-            loadAnnouncements();
-          }
-        });
+        document.getElementById('cancelAnnouncementEdit').addEventListener('click', function(){ document.getElementById('uploadAnnouncementForm').reset(); document.getElementById('announcementEditId').value = ''; });
+
+        // PDF export for announcement logs
+        async function downloadAnnouncementsLogPDF(){ const { jsPDF } = window.jspdf; const doc = new jsPDF('p','pt','a4'); const table = document.getElementById('announcementsLogTable'); const clone = table.cloneNode(true); clone.style.width='100%'; const wrapper = document.createElement('div'); wrapper.style.padding='10px'; wrapper.appendChild(clone); document.body.appendChild(wrapper); try{ const canvas = await html2canvas(clone, { scale: 2 }); const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth() - 40; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.text('Registro de acciones - Anuncios', 40, 40); doc.addImage(imgData, 'PNG', 40, 60, pdfWidth, pdfHeight); doc.save('announcements_log.pdf'); }catch(err){ alert('Error generando PDF: '+err); }finally{ wrapper.remove(); } }
+
+        document.getElementById('downloadAnnouncementsLogPdf').addEventListener('click', downloadAnnouncementsLogPDF);
+
+        // initial render
+        renderAnnouncementsTable(); renderAnnouncementLogs();
 
         
         $('#uploadCoursePdfForm').on('submit', function(e) {
@@ -319,52 +603,504 @@
             return;
           }
 
+          // store link for the selected course so only that course page can read it
           const miroBoards = JSON.parse(localStorage.getItem('miroBoards')) || {};
-          if (!miroBoards[course]) {
-            miroBoards[course] = [];
-          }
-          miroBoards[course].push({ link: boardLink });
+          if (!miroBoards[course]) { miroBoards[course] = []; }
+          const entry = { link: boardLink, timestamp: new Date().toISOString() };
+          miroBoards[course].push(entry);
           localStorage.setItem('miroBoards', JSON.stringify(miroBoards));
 
-          
+          // notifications per course (optional)
           const notifications = JSON.parse(localStorage.getItem('notifications')) || {};
-          if (!notifications[course]) {
-            notifications[course] = [];
-          }
-          notifications[course].push({
-            message: `Se ha compartido una nueva pizarra digital para tu curso. <a href="${boardLink}" target="_blank">Haz clic aquí para acceder</a>.`,
-            timestamp: new Date().toISOString()
-          });
+          if (!notifications[course]) { notifications[course] = []; }
+          notifications[course].push({ message: `Se ha compartido una nueva pizarra digital para tu curso. <a href="${boardLink}" target="_blank">Haz clic aquí para acceder</a>.`, timestamp: entry.timestamp });
           localStorage.setItem('notifications', JSON.stringify(notifications));
+
+          // log the action in a central registro (miro_links_log)
+          const log = JSON.parse(localStorage.getItem('miro_links_log') || '[]');
+          log.push({ id: (log.length? log[log.length-1].id+1 : 1), course: course, link: boardLink, timestamp: entry.timestamp });
+          localStorage.setItem('miro_links_log', JSON.stringify(log));
 
           alert(`Pizarra digital compartida exitosamente con el curso ${course}.`);
           $('#miroBoardForm')[0].reset();
+          renderMiroLogs();
         });
 
+        // Render logs table
+        function renderMiroLogs(){
+          const log = JSON.parse(localStorage.getItem('miro_links_log') || '[]');
+          const tbody = document.querySelector('#miroLogTable tbody'); tbody.innerHTML = '';
+          log.forEach((r,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i+1}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td>${r.course}</td><td><a href="${r.link}" target="_blank">${r.link}</a></td>`;
+            tbody.appendChild(tr);
+          });
+        }
+
+        // Download logs as PDF using jsPDF + html2canvas
+        async function downloadMiroLogsPDF(){
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p','pt','a4');
+          const table = document.getElementById('miroLogTable');
+          // clone table to a printable container
+          const clone = table.cloneNode(true);
+          clone.style.width = '100%';
+          const wrapper = document.createElement('div'); wrapper.style.padding='10px'; wrapper.appendChild(clone);
+          document.body.appendChild(wrapper);
+          try{
+            const canvas = await html2canvas(clone, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png');
+            const imgProps = doc.getImageProperties(imgData);
+            const pdfWidth = doc.internal.pageSize.getWidth() - 40;
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            doc.text('Registro de enlaces compartidos', 40, 40);
+            doc.addImage(imgData, 'PNG', 40, 60, pdfWidth, pdfHeight);
+            doc.save('miro_links_log.pdf');
+          }catch(err){
+            alert('Error generando PDF: '+err);
+          }finally{ wrapper.remove(); }
+        }
+
+        document.getElementById('downloadMiroLogPdf').addEventListener('click', downloadMiroLogsPDF);
+
+        // initial render for logs
+        renderMiroLogs();
+
+        // ---- Screen sharing links management ----
+        function renderScreenLinks(){
+          const links = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+          const tbody = document.querySelector('#screenLinksTable tbody'); tbody.innerHTML = '';
+          const rows = [];
+          Object.keys(links).forEach(course=>{
+            links[course].forEach((entry,i)=>{
+              rows.push({ course, entry });
+            });
+          });
+          rows.forEach((r,idx)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${idx+1}</td><td>${r.course}</td><td><a href="${r.entry.link}" target="_blank">${r.entry.link}</a></td><td>${new Date(r.entry.timestamp).toLocaleString()}</td><td><button class="btn btn-sm btn-outline-primary btn-edit-screen" data-course="${r.course}" data-index="${idx}">Editar</button> <button class="btn btn-sm btn-outline-danger btn-del-screen" data-course="${r.course}" data-index="${idx}">Borrar</button></td>`;
+            tbody.appendChild(tr);
+          });
+          // attach handlers
+          document.querySelectorAll('.btn-del-screen').forEach(btn=> btn.addEventListener('click', (e)=>{
+            if(!confirm('Eliminar este enlace?')) return;
+            const course = e.target.dataset.course;
+            const index = Number(e.target.dataset.index);
+            const flat = flattenScreenLinks();
+            const item = flat[index];
+            // remove the item from original array
+            const arr = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+            if(arr[item.course]){
+              // find matching timestamp+link and remove
+              const idxLocal = arr[item.course].findIndex(x=> x.timestamp===item.entry.timestamp && x.link===item.entry.link);
+              if(idxLocal>=0) arr[item.course].splice(idxLocal,1);
+              localStorage.setItem('screenLinks', JSON.stringify(arr));
+              pushScreenLog('baja', item.course, item.entry.link);
+              renderScreenLinks(); renderScreenLogs();
+            }
+          }));
+
+          document.querySelectorAll('.btn-edit-screen').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const flat = flattenScreenLinks();
+            const idx = Number(e.target.dataset.index);
+            const item = flat[idx];
+            const newLink = prompt('Editar enlace:', item.entry.link);
+            if(!newLink) return;
+            const arr = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+            const idxLocal = arr[item.course].findIndex(x=> x.timestamp===item.entry.timestamp && x.link===item.entry.link);
+            if(idxLocal>=0){ arr[item.course][idxLocal].link = newLink; arr[item.course][idxLocal].timestamp = new Date().toISOString(); localStorage.setItem('screenLinks', JSON.stringify(arr)); pushScreenLog('modificación', item.course, newLink); renderScreenLinks(); renderScreenLogs(); }
+          }));
+        }
+
+        function flattenScreenLinks(){
+          const links = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+          const flat = [];
+          Object.keys(links).forEach(course=> links[course].forEach(e=> flat.push({ course, entry: e })) );
+          return flat;
+        }
+
+        function pushScreenLog(action, course, link){
+          const log = JSON.parse(localStorage.getItem('screen_links_log') || '[]');
+          log.push({ id: (log.length? log[log.length-1].id+1 : 1), action, course, link, timestamp: new Date().toISOString() });
+          localStorage.setItem('screen_links_log', JSON.stringify(log));
+        }
+
+        function renderScreenLogs(){
+          const log = JSON.parse(localStorage.getItem('screen_links_log') || '[]');
+          const tbody = document.querySelector('#screenLogTable tbody'); tbody.innerHTML = '';
+          log.forEach((r,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i+1}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td>${r.action}</td><td>${r.course}</td><td><a href="${r.link}" target="_blank">${r.link}</a></td>`;
+            tbody.appendChild(tr);
+          });
+        }
+
+        document.getElementById('screenLinkForm').addEventListener('submit', function(e){
+          e.preventDefault();
+          const course = document.getElementById('screenCourseSelect').value;
+          const link = document.getElementById('screenLinkInput').value.trim();
+          if(!course || !link) { alert('Selecciona curso y pega un enlace válido.'); return; }
+          const store = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+          if(!store[course]) store[course]=[];
+          const entry = { link, timestamp: new Date().toISOString() };
+          store[course].push(entry);
+          localStorage.setItem('screenLinks', JSON.stringify(store));
+          pushScreenLog('alta', course, link);
+          alert('Enlace compartido con el curso '+course);
+          this.reset(); renderScreenLinks(); renderScreenLogs();
+        });
+
+        // download screen logs PDF
+        async function downloadScreenLogsPDF(){
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('p','pt','a4');
+          const table = document.getElementById('screenLogTable');
+          const clone = table.cloneNode(true);
+          clone.style.width='100%'; const wrapper = document.createElement('div'); wrapper.style.padding='10px'; wrapper.appendChild(clone); document.body.appendChild(wrapper);
+          try{
+            const canvas = await html2canvas(clone, { scale: 2 });
+            const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData);
+            const pdfWidth = doc.internal.pageSize.getWidth() - 40; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            doc.text('Registro de enlaces de Compartir Pantalla', 40, 40);
+            doc.addImage(imgData, 'PNG', 40, 60, pdfWidth, pdfHeight);
+            doc.save('screen_links_log.pdf');
+          }catch(err){ alert('Error generando PDF: '+err); }finally{ wrapper.remove(); }
+        }
+
+        document.getElementById('downloadScreenLogPdf').addEventListener('click', downloadScreenLogsPDF);
+
+        // initial render
+        renderScreenLinks(); renderScreenLogs();
         
+        // ---- Meet (Reunión Virtual) links management ----
+        function renderMeetLinks(){
+          const links = JSON.parse(localStorage.getItem('meetLinks') || '{}');
+          const tbody = document.querySelector('#meetLinksTable tbody'); tbody.innerHTML = '';
+          const rows = [];
+          Object.keys(links).forEach(course=>{
+            links[course].forEach(entry=> rows.push({ course, entry }));
+          });
+          rows.forEach((r,idx)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${idx+1}</td><td>${r.course}</td><td><a href="${r.entry.link}" target="_blank">${r.entry.link}</a></td><td>${new Date(r.entry.timestamp).toLocaleString()}</td><td><button class="btn btn-sm btn-outline-primary btn-edit-meet" data-course="${r.course}" data-index="${idx}">Editar</button> <button class="btn btn-sm btn-outline-danger btn-del-meet" data-course="${r.course}" data-index="${idx}">Borrar</button></td>`;
+            tbody.appendChild(tr);
+          });
+          document.querySelectorAll('.btn-del-meet').forEach(btn=> btn.addEventListener('click', (e)=>{
+            if(!confirm('Eliminar este enlace de reunión?')) return;
+            const course = e.target.dataset.course; const index = Number(e.target.dataset.index);
+            const flat = flattenMeetLinks(); const item = flat[index];
+            const arr = JSON.parse(localStorage.getItem('meetLinks') || '{}');
+            if(arr[item.course]){
+              const idxLocal = arr[item.course].findIndex(x=> x.timestamp===item.entry.timestamp && x.link===item.entry.link);
+              if(idxLocal>=0) arr[item.course].splice(idxLocal,1);
+              localStorage.setItem('meetLinks', JSON.stringify(arr));
+              pushMeetLog('baja', item.course, item.entry.link);
+              renderMeetLinks(); renderMeetLogs();
+            }
+          }));
+          document.querySelectorAll('.btn-edit-meet').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const flat = flattenMeetLinks(); const idx = Number(e.target.dataset.index); const item = flat[idx];
+            const newLink = prompt('Editar enlace de reunión:', item.entry.link); if(!newLink) return;
+            const arr = JSON.parse(localStorage.getItem('meetLinks') || '{}');
+            const idxLocal = arr[item.course].findIndex(x=> x.timestamp===item.entry.timestamp && x.link===item.entry.link);
+            if(idxLocal>=0){ arr[item.course][idxLocal].link = newLink; arr[item.course][idxLocal].timestamp = new Date().toISOString(); localStorage.setItem('meetLinks', JSON.stringify(arr)); pushMeetLog('modificación', item.course, newLink); renderMeetLinks(); renderMeetLogs(); }
+          }));
+        }
+
+        function flattenMeetLinks(){
+          const links = JSON.parse(localStorage.getItem('meetLinks') || '{}'); const flat = [];
+          Object.keys(links).forEach(course=> links[course].forEach(e=> flat.push({ course, entry: e })) ); return flat;
+        }
+
+        function pushMeetLog(action, course, link){
+          const log = JSON.parse(localStorage.getItem('meet_links_log') || '[]');
+          log.push({ id: (log.length? log[log.length-1].id+1 : 1), action, course, link, timestamp: new Date().toISOString() });
+          localStorage.setItem('meet_links_log', JSON.stringify(log));
+        }
+
+        function renderMeetLogs(){
+          const log = JSON.parse(localStorage.getItem('meet_links_log') || '[]');
+          const tbody = document.querySelector('#meetLogTable tbody'); tbody.innerHTML = '';
+          log.forEach((r,i)=>{ const tr = document.createElement('tr'); tr.innerHTML = `<td>${i+1}</td><td>${new Date(r.timestamp).toLocaleString()}</td><td>${r.action}</td><td>${r.course}</td><td><a href="${r.link}" target="_blank">${r.link}</a></td>`; tbody.appendChild(tr); });
+        }
+
+        document.getElementById('meetLinkForm').addEventListener('submit', function(e){
+          e.preventDefault(); const course = document.getElementById('meetCourseSelect').value; const link = document.getElementById('meetLinkInput').value.trim();
+          if(!course || !link) { alert('Selecciona curso y pega un enlace válido de Meet.'); return; }
+          const store = JSON.parse(localStorage.getItem('meetLinks') || '{}'); if(!store[course]) store[course]=[];
+          const entry = { link, timestamp: new Date().toISOString() }; store[course].push(entry); localStorage.setItem('meetLinks', JSON.stringify(store)); pushMeetLog('alta', course, link); alert('Enlace de reunión compartido con el curso '+course); this.reset(); renderMeetLinks(); renderMeetLogs();
+        });
+
+        // download meet logs PDF
+        async function downloadMeetLogsPDF(){
+          const { jsPDF } = window.jspdf; const doc = new jsPDF('p','pt','a4'); const table = document.getElementById('meetLogTable'); const clone = table.cloneNode(true); clone.style.width='100%'; const wrapper = document.createElement('div'); wrapper.style.padding='10px'; wrapper.appendChild(clone); document.body.appendChild(wrapper);
+          try{ const canvas = await html2canvas(clone, { scale: 2 }); const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth() - 40; const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.text('Registro de enlaces de Reunión Virtual', 40, 40); doc.addImage(imgData, 'PNG', 40, 60, pdfWidth, pdfHeight); doc.save('meet_links_log.pdf'); }catch(err){ alert('Error generando PDF: '+err); }finally{ wrapper.remove(); }
+        }
+
+        document.getElementById('downloadMeetLogPdf').addEventListener('click', downloadMeetLogsPDF);
+
+        // initial render for meet
+        renderMeetLinks(); renderMeetLogs();
+        // initial render for meet
+        renderMeetLinks(); renderMeetLogs();
+
+        // ---- Support Videos management ----
+        function getSupportVideos(){ return JSON.parse(localStorage.getItem('supportVideos') || '[]'); }
+        function saveSupportVideos(arr){ localStorage.setItem('supportVideos', JSON.stringify(arr)); }
+
+        function renderSupportVideos(){
+          const arr = getSupportVideos();
+          const tbody = document.querySelector('#supportVideosTable tbody'); tbody.innerHTML = '';
+          arr.forEach((v,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i+1}</td><td>${v.teacher}</td><td>${v.area}</td><td>${v.course}</td><td><a href="${v.link}" target="_blank">${v.link}</a></td><td><button class="btn btn-sm btn-outline-primary btn-edit-sv" data-id="${v.id}">Editar</button> <button class="btn btn-sm btn-outline-danger btn-del-sv" data-id="${v.id}">Borrar</button></td>`;
+            tbody.appendChild(tr);
+          });
+
+          document.querySelectorAll('.btn-del-sv').forEach(btn=> btn.addEventListener('click', (e)=>{
+            if(!confirm('Eliminar este video de apoyo?')) return;
+            const id = e.target.dataset.id; let arr = getSupportVideos(); arr = arr.filter(x=> String(x.id)!==String(id)); saveSupportVideos(arr); renderSupportVideos();
+          }));
+
+          document.querySelectorAll('.btn-edit-sv').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const id = e.target.dataset.id; const arr = getSupportVideos(); const item = arr.find(x=> String(x.id)===String(id)); if(!item) return; 
+            const teacherSelect = document.getElementById('svTeacherSelect'); const areaSelect = document.getElementById('svAreaSelect');
+            // set selects (add option if missing)
+            if(!Array.from(teacherSelect.options).some(o=> o.value===item.teacher)){ const o = document.createElement('option'); o.value = item.teacher; o.textContent = item.teacher; teacherSelect.appendChild(o); }
+            if(!Array.from(areaSelect.options).some(o=> o.value===item.area)){ const o2 = document.createElement('option'); o2.value = item.area; o2.textContent = item.area; areaSelect.appendChild(o2); }
+            teacherSelect.value = item.teacher; areaSelect.value = item.area; document.getElementById('svCourse').value = item.course; document.getElementById('svLink').value = item.link; document.getElementById('svEditId').value = item.id;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }));
+        }
+
+        document.getElementById('supportVideoForm').addEventListener('submit', function(e){
+          e.preventDefault();
+          const teacher = document.getElementById('svTeacherSelect').value.trim();
+          const area = document.getElementById('svAreaSelect').value.trim();
+          const course = document.getElementById('svCourse').value;
+          const link = document.getElementById('svLink').value.trim();
+          if(!teacher || !area || !course || !link) { alert('Completa todos los campos.'); return; }
+          let arr = getSupportVideos();
+          const editId = document.getElementById('svEditId').value;
+          if(editId){ // update
+            const idx = arr.findIndex(x=> String(x.id)===String(editId));
+            if(idx>=0){ arr[idx].teacher = teacher; arr[idx].area = area; arr[idx].course = course; arr[idx].link = link; arr[idx].updatedAt = new Date().toISOString(); }
+            document.getElementById('svEditId').value = '';
+            alert('Video actualizado.');
+          } else { // create
+            const id = arr.length? (Math.max(...arr.map(x=>x.id))+1) : 1;
+            arr.push({ id, teacher, area, course, link, createdAt: new Date().toISOString() });
+            alert('Video agregado.');
+          }
+          saveSupportVideos(arr); this.reset(); renderSupportVideos();
+        });
+
+        // initial render
+        renderSupportVideos();
+
+        // --- populate teacher & area selects with known list ---
+        const TEACHERS = [
+          { name: 'Conrady Colque Jeanneth Sandra', area: 'Geografía' },
+          { name: 'Aliaga Reyes Alexander Esteban', area: 'Matemática' },
+          { name: 'Salazar Paccompia Henry Vicente', area: 'Lengua Extranjera' },
+          { name: 'Quispe Ticona Freddy', area: 'Historia' },
+          { name: 'Casas Chico Santos Lino', area: 'Biología' },
+          { name: 'Huaycho Amelia', area: 'Comunicación y Lenguajes' },
+          { name: 'Carvajal Sanches Edwin Rafael', area: 'Educación Física' },
+          { name: 'Calle Calle Marcos', area: 'Química' },
+          { name: 'Simón Ramírez María Eugenia', area: 'Informática Especializada 2' },
+          { name: 'Muñoz Rocha Edgar Angel', area: 'Cosmovisiones, Filosofía y Psicología' },
+          { name: 'Choque Huarin Jacobo Humberto', area: 'Música' },
+          { name: 'Laura Mendoza Gualberto', area: 'Artes Plásticas y Visuales' },
+          { name: 'Nava Morales Javier', area: 'Informática Especializada 1' },
+          { name: 'Tapia Illanes Irene', area: 'Educación Cívica' },
+          { name: 'Figueredo Gonzalo', area: 'Valores, Espiritualidad y Religiones' },
+          { name: 'Quispe Plata Alexis', area: 'Física' }
+        ];
+
+        function populateTeacherAndAreaSelects(){
+          const tsel = document.getElementById('svTeacherSelect'); const asel = document.getElementById('svAreaSelect');
+          // add teachers
+          TEACHERS.forEach(t=>{ if(!Array.from(tsel.options).some(o=> o.value===t.name)){ const o=document.createElement('option'); o.value=t.name; o.textContent=t.name; tsel.appendChild(o); } });
+          // add unique areas
+          const areas = Array.from(new Set(TEACHERS.map(t=>t.area)));
+          areas.forEach(a=>{ if(!Array.from(asel.options).some(o=> o.value===a)){ const o=document.createElement('option'); o.value=a; o.textContent=a; asel.appendChild(o); } });
+
+          // when teacher is selected, auto-select area if known
+          tsel.addEventListener('change', ()=>{
+            const sel = tsel.value; const found = TEACHERS.find(x=> x.name===sel);
+            if(found) asel.value = found.area;
+          });
+        }
+
+        populateTeacherAndAreaSelects();
+
         loadAnnouncements();
       });
     </script>
     <script>
-      document.getElementById('announcementForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+      // Deportes provisional: offline-first, intenta usar API si está disponible
+      (function(){
+  const TEAMS_KEY = 'sports_teams_v1';
+  const PLAYERS_KEY = 'sports_players_v1';
+  const MATCHES_KEY = 'sports_matches_v1';
+  const MANUAL_KEY = 'sports_manual_stats_v1';
 
-        const title = document.getElementById('announcementTitle').value;
-        const content = document.getElementById('announcementContent').value;
-        const date = new Date().toLocaleDateString();
+        // Si no existen equipos, inicializar los 18 equipos oficiales proporcionados
+        function ensureInitialSportsTeams(){
+          const existing = JSON.parse(localStorage.getItem(TEAMS_KEY) || '[]');
+          if(existing && existing.length) return; // ya hay equipos
+          const names = [
+            'Always Ready 6A',
+            'Aurora 1A',
+            'Blooming 1B',
+            'Bolívar 1C',
+            'Destroyers 2A',
+            'GV San José 2B',
+            'Guabirá 2C',
+            'Independiente Petrolero 3A',
+            'Jorge Wilstermann 3B',
+            'Nacional Potosí 3C',
+            'Oruro Royal 4A',
+            'Oriente Petrolero 4B',
+            'Real Potosí 4C',
+            'Real Santa Cruz 5A',
+            'Real Tomayapo 5B',
+            'San Antonio Bulo Bulo 5C',
+            'San José 6B',
+            'The Strongest 6C'
+          ];
+          const teams = names.map((n,i)=>({ id: i+1, name: n }));
+          localStorage.setItem(TEAMS_KEY, JSON.stringify(teams));
+          // ensure players and matches exist as empty arrays so UI behaves
+          if(!localStorage.getItem(PLAYERS_KEY)) localStorage.setItem(PLAYERS_KEY, JSON.stringify([]));
+          if(!localStorage.getItem(MATCHES_KEY)) localStorage.setItem(MATCHES_KEY, JSON.stringify([]));
+        }
 
-        const newAnnouncement = { title, content, date };
+        // helpers
+        function load(key){ return JSON.parse(localStorage.getItem(key) || '[]'); }
+        function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 
-        
-        const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
-        announcements.push(newAnnouncement);
+        function renderTeams(){
+          const teams = load(TEAMS_KEY);
+          const ul = document.getElementById('teamsList'); ul.innerHTML='';
+          const sel = document.getElementById('playerTeamSelect'); sel.innerHTML='<option value="">Seleccionar equipo</option>';
+          const mhome = document.getElementById('matchHome'); const maway = document.getElementById('matchAway');
+          [mhome, maway].forEach(s=>{ s.innerHTML='<option value="">Seleccionar equipo</option>'; });
+          teams.forEach(t=>{
+            const li = document.createElement('li'); li.className='list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `<span>${t.name}</span><span><button class="btn btn-sm btn-danger btn-del-team" data-id="${t.id}">Borrar</button></span>`;
+            ul.appendChild(li);
+            const o = document.createElement('option'); o.value = t.id; o.textContent = t.name; sel.appendChild(o);
+            [mhome, maway].forEach(s=>{ const o2 = o.cloneNode(true); s.appendChild(o2); });
+          });
+          document.querySelectorAll('.btn-del-team').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const id = e.target.dataset.id; if(!confirm('Eliminar equipo?')) return;
+            let teams = load(TEAMS_KEY); teams = teams.filter(x=>String(x.id)!==String(id)); save(TEAMS_KEY, teams);
+            // remove players of team
+            let players = load(PLAYERS_KEY); players = players.filter(p=>String(p.teamId)!==String(id)); save(PLAYERS_KEY, players);
+            renderPlayers(); renderTeams(); renderStandings();
+          }));
+        }
 
-        
-        localStorage.setItem('announcements', JSON.stringify(announcements));
+        function renderPlayers(){
+          const players = load(PLAYERS_KEY); const selTeam = document.getElementById('playerTeamSelect');
+          const ul = document.getElementById('playersList'); ul.innerHTML='';
+          const teamId = selTeam.value;
+          const filtered = teamId? players.filter(p=>String(p.teamId)===String(teamId)) : players;
+          filtered.forEach(p=>{
+            const li = document.createElement('li'); li.className='list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `<span>${p.name} <small class="text-muted">(${p.teamName||''})</small></span><span><button class="btn btn-sm btn-danger btn-del-player" data-id="${p.id}">Borrar</button></span>`;
+            ul.appendChild(li);
+          });
+          document.querySelectorAll('.btn-del-player').forEach(btn=> btn.addEventListener('click', (e)=>{
+            const id = e.target.dataset.id; if(!confirm('Eliminar jugador?')) return;
+            let players = load(PLAYERS_KEY); players = players.filter(x=>String(x.id)!==String(id)); save(PLAYERS_KEY, players);
+            renderPlayers(); renderStandings();
+          }));
+        }
 
-        alert('Anuncio publicado exitosamente.');
-        document.getElementById('announcementForm').reset();
-      });
+        function renderStandings(){
+          const teams = load(TEAMS_KEY); const matches = load(MATCHES_KEY);
+          const stats = teams.map(t=>({ id:t.id, name:t.name, pts:0, pj:0, g:0, gc:0, d:0 }));
+          matches.forEach(m=>{
+            const home = stats.find(s=>String(s.id)===String(m.homeId));
+            const away = stats.find(s=>String(s.id)===String(m.awayId));
+            if(!home || !away) return;
+            home.pj++; away.pj++;
+            home.g += Number(m.homeScore); home.gc += Number(m.awayScore);
+            away.g += Number(m.awayScore); away.gc += Number(m.homeScore);
+            if(Number(m.homeScore) > Number(m.awayScore)) { home.pts += 3; }
+            else if(Number(m.homeScore) < Number(m.awayScore)) { away.pts += 3; }
+            else { home.pts +=1; away.pts +=1; }
+          });
+          // sort by pts desc, then gd
+          stats.sort((a,b)=> (b.pts - a.pts) || ((b.g - b.gc) - (a.g - a.gc)) || (b.g - a.g));
+          const tbody = document.querySelector('#standingsTable tbody'); tbody.innerHTML='';
+          stats.forEach((s,i)=>{ const tr = document.createElement('tr'); tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td>${s.pts}</td><td>${s.pj}</td><td>${s.g - s.gc}</td><td>${s.gc}</td><td>${s.d}</td><td>${s.g}</td>`; tbody.appendChild(tr); });
+        }
+
+        // form handlers
+        document.getElementById('teamForm').addEventListener('submit', e=>{
+          e.preventDefault(); const name = document.getElementById('teamName').value.trim(); if(!name) return;
+          const teams = load(TEAMS_KEY); const id = teams.length? (Math.max(...teams.map(t=>t.id))+1) : 1; teams.push({ id, name }); save(TEAMS_KEY, teams);
+          document.getElementById('teamName').value=''; renderTeams(); renderStandings();
+        });
+
+        document.getElementById('playerTeamSelect').addEventListener('change', ()=>{ renderPlayers(); });
+
+        document.getElementById('playerAddForm').addEventListener('submit', e=>{
+          e.preventDefault(); const name=document.getElementById('playerName').value.trim(); const teamId=document.getElementById('playerTeamSelect').value; if(!name || !teamId){ alert('Elige equipo y nombre'); return; }
+          const teams = load(TEAMS_KEY); const team = teams.find(t=>String(t.id)===String(teamId));
+          const players = load(PLAYERS_KEY); const id = players.length? (Math.max(...players.map(p=>p.id))+1):1; players.push({ id, name, teamId, teamName: team? team.name:'' }); save(PLAYERS_KEY, players);
+          document.getElementById('playerName').value=''; renderPlayers();
+        });
+
+        document.getElementById('matchForm').addEventListener('submit', e=>{
+          e.preventDefault(); const homeId = document.getElementById('matchHome').value; const awayId = document.getElementById('matchAway').value; const homeScore = document.getElementById('scoreHome').value; const awayScore = document.getElementById('scoreAway').value; const date = document.getElementById('matchDate').value || new Date().toISOString().slice(0,10);
+          if(!homeId || !awayId || homeId===awayId){ alert('Selecciona dos equipos diferentes'); return; }
+          const matches = load(MATCHES_KEY); const id = matches.length? (Math.max(...matches.map(m=>m.id))+1):1; matches.push({ id, homeId, awayId, homeScore:Number(homeScore), awayScore:Number(awayScore), date }); save(MATCHES_KEY, matches);
+          renderStandings();
+        });
+
+        document.getElementById('syncSports').addEventListener('click', async ()=>{
+          // try to push teams, players, matches to API if endpoints exist
+          const teams = load(TEAMS_KEY), players = load(PLAYERS_KEY), matches = load(MATCHES_KEY);
+          const results=[];
+          for(const t of teams){ try{ const r=await fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:t.name})}); results.push(r.ok? 'team ok':'team err'); }catch(e){ results.push('team err'); } }
+          for(const p of players){ try{ const r=await fetch('/api/players',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:p.name, curso:'', equipo_id:p.teamId})}); results.push(r.ok? 'player ok':'player err'); }catch(e){ results.push('player err'); } }
+          // matches/standings endpoints might not exist; just report
+          alert('Sincronización intentada. Resultados: ' + results.join(', '));
+        });
+
+        // initial render
+        renderTeams(); renderPlayers(); renderStandings();
+
+        // Sidebar toggle: persist collapsed state in localStorage
+        (function(){
+          const key = 'adminSidebarCollapsed_v1';
+          const sidebar = document.getElementById('adminSidebar');
+          const btn = document.getElementById('sidebarToggle');
+          function setCollapsed(collapsed){
+            if(collapsed){ sidebar.classList.add('collapsed'); document.body.classList.add('sidebar-collapsed'); }
+            else { sidebar.classList.remove('collapsed'); document.body.classList.remove('sidebar-collapsed'); }
+            try{ localStorage.setItem(key, JSON.stringify(!!collapsed)); }catch(e){}
+          }
+          // initialize from storage
+          try{ const stored = JSON.parse(localStorage.getItem(key)); if(stored) setCollapsed(true); }catch(e){}
+          btn.addEventListener('click', ()=>{ const collapsed = sidebar.classList.contains('collapsed'); setCollapsed(!collapsed); });
+        })();
+
+        // Vaciar tabla handler: poner puntajes a 0 (no borra equipos/jugadores)
+        document.getElementById('clearStandingsBtn').addEventListener('click', ()=>{
+          if(!confirm('¿Poner puntajes de equipos a 0? Esto reseteará los resultados y estadísticas guardadas localmente.')) return;
+          save(MATCHES_KEY, []);
+          save(MANUAL_KEY, {});
+          renderTeams(); renderPlayers(); renderStandings();
+          alert('Puntajes reseteados a 0.');
+        });
+      })();
     </script>
+    
   </body>
 </html>

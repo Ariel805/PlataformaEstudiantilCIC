@@ -112,7 +112,7 @@
             <i class="fas fa-chalkboard fa-4x mb-3"></i>
             <h5 class="card-title">Pizarra Digital</h5>
             <p class="card-text">Colabora en tiempo real con tus compañeros y profesores.</p>
-            <button class="btn btn-primary" onclick="alert('Funcionalidad de pizarra digital próximamente disponible.')">Abrir Pizarra</button>
+            <button id="openMiroBtn" class="btn btn-primary" onclick="alert('Funcionalidad de pizarra digital próximamente disponible.')">Abrir Pizarra</button>
           </div>
         </div>
       </div>
@@ -122,17 +122,17 @@
             <i class="fas fa-desktop fa-4x mb-3"></i>
             <h5 class="card-title">Compartir Pantalla</h5>
             <p class="card-text">Comparte tu pantalla para presentaciones y trabajo colaborativo.</p>
-            <button class="btn btn-primary" onclick="alert('Funcionalidad de compartir pantalla próximamente disponible.')">Compartir Pantalla</button>
+            <button id="shareScreenBtn" class="btn btn-primary" onclick="alert('Funcionalidad de compartir pantalla próximamente disponible.')">Compartir Pantalla</button>
           </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="card text-center h-100">
           <div class="card-body">
-            <i class="fas fa-folder-open fa-4x mb-3"></i>
-            <h5 class="card-title">Kardex Digital</h5>
-            <p class="card-text">Consulta tu kardex digital con tus avances y registros académicos.</p>
-            <button class="btn btn-primary" onclick="alert('Funcionalidad de kardex digital próximamente disponible.')">Ver Kardex</button>
+            <i class="fas fa-video fa-4x mb-3"></i>
+            <h5 class="card-title">Reunión Virtual</h5>
+            <p class="card-text">Accede a la sala de reunión virtual para clases y tutorías en línea.</p>
+            <button id="meetBtn" class="btn btn-primary" onclick="alert('Funcionalidad de reunión virtual próximamente disponible.')">Unirse a la Reunión</button>
           </div>
         </div>
       </div>
@@ -142,44 +142,129 @@
     <div class="row justify-content-center">
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Alexander Aliaga" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Alexander Aliaga</h5>
-          <p class="mb-0">Matemáticas</p>
+          <img src="imagenes/profesor.png" alt="Conrady Colque Jeanneth Sandra" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Conrady Colque Jeanneth Sandra</h5>
+          <p class="mb-0">Geografía</p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Huaycho Amalia" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Huaycho Amalia</h5>
-          <p class="mb-0">Comunicación y Lenguajes</p>
+          <img src="imagenes/profesor.png" alt="Aliaga Reyes Alexander Esteban" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Aliaga Reyes Alexander Esteban</h5>
+          <p class="mb-0">Matemática</p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Santos Casas" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Santos Casas</h5>
-          <p class="mb-0">Biología</p>
+          <img src="imagenes/profesor.png" alt="Salazar Paccompia Henry Vicente" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Salazar Paccompia Henry Vicente</h5>
+          <p class="mb-0">Lengua Extranjera</p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Freddy Quispe" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Freddy Quispe</h5>
+          <img src="imagenes/profesor.png" alt="Quispe Ticona Freddy" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Quispe Ticona Freddy</h5>
           <p class="mb-0">Historia</p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Henry Salazar" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Henry Salazar</h5>
-          <p class="mb-0">Inglés</p>
+          <img src="imagenes/profesor.png" alt="Casas Chico Santos Lino" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Casas Chico Santos Lino</h5>
+          <p class="mb-0">Biología</p>
         </div>
       </div>
+
       <div class="col-md-3">
         <div class="teacher-card">
-          <img src="imagenes/profesor.png" alt="Lic. Edwin Carvajal" class="teacher-img">
-          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Lic. Edwin Carvajal</h5>
+          <img src="imagenes/profesor.png" alt="Huaycho Amelia" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Huaycho Amelia</h5>
+          <p class="mb-0">Comunicación y Lenguajes</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Carvajal Sanches Edwin Rafael" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Carvajal Sanches Edwin Rafael</h5>
           <p class="mb-0">Educación Física</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Calle Calle Marcos" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Calle Calle Marcos</h5>
+          <p class="mb-0">Química</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Simón Ramírez María Eugenia" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Simón Ramírez María Eugenia</h5>
+          <p class="mb-0">Informática Especializada 2</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Muñoz Rocha Edgar Angel" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Muñoz Rocha Edgar Angel</h5>
+          <p class="mb-0">Cosmovisiones, Filosofía y Psicología</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Choque Huarin Jacobo Humberto" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Choque Huarin Jacobo Humberto</h5>
+          <p class="mb-0">Música</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Laura Mendoza Gualberto" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Laura Mendoza Gualberto</h5>
+          <p class="mb-0">Artes Plásticas y Visuales</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Nava Morales Javier" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Nava Morales Javier</h5>
+          <p class="mb-0">Informática Especializada 1</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Tapia Illanes Irene" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Tapia Illanes Irene</h5>
+          <p class="mb-0">Educación Cívica</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Figueredo Gonzalo" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Figueredo Gonzalo</h5>
+          <p class="mb-0">Valores, Espiritualidad y Religiones</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="teacher-card">
+          <img src="imagenes/profesor.png" alt="Quispe Plata Alexis" class="teacher-img">
+          <h5 class="mt-2 mb-1" style="color:var(--primary-color)">Quispe Plata Alexis</h5>
+          <p class="mb-0">Física</p>
         </div>
       </div>
     </div>
@@ -187,5 +272,71 @@
   <footer class="footer">
     <p>&copy; 2025 Colegio Inglés Católico. Todos los derechos reservados.</p>
   </footer>
+  <!-- Modal: Videos de Apoyo -->
+  <div class="modal fade" id="videosModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="videosModalLabel">Videos de Apoyo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="videosContainer"></div>
+      </div>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    try{
+      const key = '6C';
+      const boards = JSON.parse(localStorage.getItem('miroBoards') || '{}');
+      const miroBtn = document.getElementById('openMiroBtn');
+      if(boards && boards[key] && boards[key].length){
+        const last = boards[key][boards[key].length-1];
+        if(last && last.link){
+          miroBtn.textContent = 'Abrir Pizarra — Enlace disponible';
+          miroBtn.onclick = function(){ window.open(last.link, '_blank'); };
+          miroBtn.classList.remove('btn-primary'); miroBtn.classList.add('btn-success');
+        }
+      }
+
+      // screen sharing
+      try{
+        const screenLinks = JSON.parse(localStorage.getItem('screenLinks') || '{}');
+        const shareBtn = document.getElementById('shareScreenBtn');
+        if(shareBtn && screenLinks && screenLinks[key] && screenLinks[key].length){
+          const lastScreen = screenLinks[key][screenLinks[key].length-1];
+          if(lastScreen && lastScreen.link){
+            shareBtn.textContent = 'Compartir Pantalla — Enlace disponible';
+            shareBtn.onclick = function(){ window.open(lastScreen.link, '_blank'); };
+            shareBtn.classList.remove('btn-primary'); shareBtn.classList.add('btn-success');
+          }
+        }
+      }catch(e){ console.error(e); }
+
+      // Meet links
+      try{
+        const meetLinks = JSON.parse(localStorage.getItem('meetLinks') || '{}');
+        const meetBtn = document.getElementById('meetBtn');
+        if(meetBtn && meetLinks && meetLinks[key] && meetLinks[key].length){
+          const lastMeet = meetLinks[key][meetLinks[key].length-1];
+          if(lastMeet && lastMeet.link){
+            meetBtn.textContent = 'Unirse a la Reunión — Enlace disponible';
+            meetBtn.onclick = function(){ window.open(lastMeet.link, '_blank'); };
+            meetBtn.classList.remove('btn-primary'); meetBtn.classList.add('btn-success');
+          }
+        }
+      }catch(e){ console.error('meetLinks error', e); }
+
+      // Support videos click handlers
+      try{
+        const courseKey = '6C';
+        function toEmbed(link){ try{ const m = link.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/); if(m && m[1]) return 'https://www.youtube.com/embed/' + m[1]; return link;}catch(e){return link;} }
+        function showSupportVideosFor(teacher){ const arr = JSON.parse(localStorage.getItem('supportVideos') || '[]'); const videos = arr.filter(v=> v.course===courseKey && v.teacher===teacher); const container = document.getElementById('videosContainer'); container.innerHTML=''; const title = document.getElementById('videosModalLabel'); title.textContent = `Videos de apoyo — ${teacher}`; if(!videos.length) container.innerHTML = '<p>No hay videos de apoyo registrados para este docente en el curso.</p>'; else videos.forEach(v=>{ const div=document.createElement('div'); div.className='mb-3'; const iframe=document.createElement('iframe'); iframe.width='100%'; iframe.height='360'; iframe.src=toEmbed(v.link); iframe.frameBorder='0'; iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'; iframe.allowFullscreen=true; const caption=document.createElement('div'); caption.className='mt-2'; caption.innerHTML=`<strong>${v.area}</strong> — <a href="${v.link}" target="_blank">Abrir en YouTube</a>`; div.appendChild(iframe); div.appendChild(caption); container.appendChild(div); }); const modalEl = document.getElementById('videosModal'); const modal = new bootstrap.Modal(modalEl); modal.show(); }
+        document.querySelectorAll('.teacher-card').forEach(card=>{ card.style.cursor='pointer'; card.addEventListener('click', ()=>{ const h5 = card.querySelector('h5'); if(!h5) return; const name = h5.textContent.trim(); showSupportVideosFor(name); }); });
+      }catch(e){ console.error('support videos error', e); }
+    }catch(e){ console.error(e); }
+  });
+</script>
 </body>
 </html>

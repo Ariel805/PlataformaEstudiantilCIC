@@ -385,7 +385,7 @@
       <nav class="navbar-custom">
         <div class="navbar-container">
           <div class="navbar-logo">
-            <img src="C:\Users\Ariel\Desktop\proyecto de gradoo beta 1\imagenes\logoplat-removebg-preview.png" alt="Logo Synapse CIC" class="logo-img">
+            <img src="imagenes/logoplat-removebg-preview.png" alt="Logo Synapse CIC" class="logo-img">
           </div>
           <ul class="navbar-menu">
             <li><a href="index.html" class="active">Inicio</a></li>
@@ -493,7 +493,7 @@
     const equiposMasculino = cursosMasculino.map((curso, i) => ({
       curso,
       nombre: `Equipo M ${curso}`,
-  logo: 'imagenes/logoplat.png',
+  logo: 'imagenes/logoplat-removebg-preview.png',
       jugadores: generarJugadoresAleatoriosUnicos(curso, 7)
     }));
 
@@ -647,46 +647,229 @@
       </section>
       <script>
         
-        const cursos = [
-          '1A','1B','1C','2A','2B','2C','3A','3B','3C','4A','4B','4C','5A','5B','5C','6A','6B','6C'
+        // Standings now driven by admin panel via localStorage keys:
+        // teams -> 'sports_teams_v1'
+        // players -> 'sports_players_v1'
+        // matches -> 'sports_matches_v1'
+        // manual stats (optional overrides) -> 'sports_manual_stats_v1'
+
+        const TEAMS_KEY = 'sports_teams_v1';
+        const PLAYERS_KEY = 'sports_players_v1';
+        const MATCHES_KEY = 'sports_matches_v1';
+        const MANUAL_KEY = 'sports_manual_stats_v1';
+
+        // initial teams and sample stats (from the table the user provided)
+        const initialTeams = [
+          'Always Ready 6A',
+          'Aurora 1A',
+          'Blooming 1B',
+          'Bolívar 1C',
+          'Destroyers 2A',
+          'GV San José 2B',
+          'Guabirá 2C',
+          'Independiente Petrolero 3A',
+          'Jorge Wilstermann 3B',
+          'Nacional Potosí 3C',
+          'Oruro Royal 4A',
+          'Oriente Petrolero 4B',
+          'Real Potosí 4C',
+          'Real Santa Cruz 5A',
+          'Real Tomayapo 5B',
+          'San Antonio Bulo Bulo 5C',
+          'San José 6B',
+          'The Strongest 6C'
         ];
-        const posicionesNueva = cursos.map((curso, i) => {
-          
-          const pj = Math.floor(Math.random()*10)+5;
-          const pg = Math.floor(Math.random()*pj);
-          const pe = Math.floor(Math.random()*(pj-pg));
-          const pp = pj - pg - pe;
-          const gf = Math.floor(Math.random()*30);
-          const gc = Math.floor(Math.random()*30);
-          const dg = gf - gc;
-          const pts = (pg*3)+(pe*1);
-          return {
-            pos: i+1,
-            equipo: `EQUIPO ${curso} M`,
-            pj, pg, pe, pp, gf, gc, dg, pts
-          };
-        });
-        function renderTablaPosicionesNueva() {
-          const tbody = document.getElementById('tbodyPosicionesNueva');
-          tbody.innerHTML = '';
-          posicionesNueva.forEach(eq => {
-            tbody.innerHTML += `
-              <tr class="tabla-row-neon">
-                <td>${eq.pos}</td>
-                <td>${eq.equipo}</td>
-                <td>${eq.pj}</td>
-                <td>${eq.pg}</td>
-                <td>${eq.pe}</td>
-                <td>${eq.pp}</td>
-                <td>${eq.gf}</td>
-                <td>${eq.gc}</td>
-                <td>${eq.dg>0?`+${eq.dg}`:eq.dg}</td>
-                <td>${eq.pts}</td>
-              </tr>
-            `;
+
+        const initialManual = {
+          1: {pj:14, pg:9, pe:2, pp:3, gf:8, gc:2, pts:29},
+          2: {pj:5, pg:3, pe:1, pp:1, gf:9, gc:5, pts:10},
+          3: {pj:7, pg:2, pe:4, pp:1, gf:11, gc:19, pts:10},
+          4: {pj:9, pg:6, pe:1, pp:2, gf:11, gc:22, pts:19},
+          5: {pj:13, pg:6, pe:0, pp:7, gf:22, gc:14, pts:18},
+          6: {pj:11, pg:8, pe:2, pp:1, gf:28, gc:29, pts:26},
+          7: {pj:11, pg:4, pe:1, pp:6, gf:5, gc:8, pts:13},
+          8: {pj:6, pg:5, pe:0, pp:1, gf:23, gc:26, pts:15},
+          9: {pj:13, pg:0, pe:9, pp:4, gf:3, gc:3, pts:9},
+          10: {pj:8, pg:4, pe:0, pp:4, gf:26, gc:6, pts:12},
+          11: {pj:7, pg:0, pe:6, pp:1, gf:16, gc:24, pts:6},
+          12: {pj:10, pg:3, pe:3, pp:4, gf:6, gc:20, pts:12},
+          13: {pj:14, pg:12, pe:1, pp:1, gf:24, gc:3, pts:37},
+          14: {pj:10, pg:9, pe:0, pp:1, gf:6, gc:17, pts:27},
+          15: {pj:10, pg:1, pe:4, pp:5, gf:13, gc:5, pts:7},
+          16: {pj:12, pg:11, pe:0, pp:1, gf:17, gc:3, pts:33},
+          17: {pj:12, pg:8, pe:2, pp:2, gf:22, gc:2, pts:26},
+          18: {pj:9, pg:8, pe:0, pp:1, gf:29, gc:10, pts:24}
+        };
+
+        function ensureInitial(){
+          if(!localStorage.getItem(TEAMS_KEY)){
+            const teams = initialTeams.map((name,i)=>({ id: i+1, name }));
+            localStorage.setItem(TEAMS_KEY, JSON.stringify(teams));
+          }
+          if(!localStorage.getItem(MANUAL_KEY)){
+            localStorage.setItem(MANUAL_KEY, JSON.stringify(initialManual));
+          }
+        }
+
+        function getTeams(){ return JSON.parse(localStorage.getItem(TEAMS_KEY) || '[]'); }
+        function getMatches(){ return JSON.parse(localStorage.getItem(MATCHES_KEY) || '[]'); }
+        function getManual(){ return JSON.parse(localStorage.getItem(MANUAL_KEY) || '{}'); }
+
+        function saveTeams(teams){ localStorage.setItem(TEAMS_KEY, JSON.stringify(teams)); }
+        function saveManual(man){ localStorage.setItem(MANUAL_KEY, JSON.stringify(man)); }
+
+        // compute stats from matches
+        function computeFromMatches(){
+          const teams = getTeams();
+          const matches = getMatches();
+          const stats = {};
+          teams.forEach(t=> stats[t.id] = { pj:0, pg:0, pe:0, pp:0, gf:0, gc:0, pts:0 });
+          matches.forEach(m=>{
+            const h = String(m.homeId), a = String(m.awayId);
+            if(!stats[h] || !stats[a]) return;
+            const hs = Number(m.homeScore), as = Number(m.awayScore);
+            stats[h].pj++; stats[a].pj++;
+            stats[h].gf += hs; stats[h].gc += as;
+            stats[a].gf += as; stats[a].gc += hs;
+            if(hs>as){ stats[h].pg++; stats[h].pts +=3; stats[a].pp++; }
+            else if(hs<as){ stats[a].pg++; stats[a].pts +=3; stats[h].pp++; }
+            else { stats[h].pe++; stats[a].pe++; stats[h].pts+=1; stats[a].pts+=1; }
+          });
+          return stats;
+        }
+
+        // small helper to escape HTML when rendering read-only values
+        function escapeHtml(str){
+          return String(str === undefined || str === null ? '' : str).replace(/[&<>"']/g, function(c){
+            return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c];
           });
         }
-        renderTablaPosicionesNueva();
+
+        function buildTable(){
+          ensureInitial();
+          const teams = getTeams();
+          const matches = getMatches();
+          const manual = getManual();
+          // if matches exist, compute from matches; else use manual stats
+          const computed = (matches && matches.length)? computeFromMatches() : {};
+          // merge manual and computed: computed takes precedence; manual fills missing
+          const rows = teams.map(t=>{
+            const id = t.id;
+            const base = computed && computed[id] ? computed[id] : (manual[id] || {pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,pts:0});
+            return {
+              id,
+              name: t.name,
+              pj: base.pj || 0,
+              pg: base.pg || 0,
+              pe: base.pe || 0,
+              pp: base.pp || 0,
+              gf: base.gf || 0,
+              gc: base.gc || 0,
+              pts: base.pts || 0
+            };
+          });
+          // calculate dg
+          rows.forEach(r=> r.dg = r.gf - r.gc);
+          // allow either admin.html or admins.html (some files use plural)
+          const editMode = /admin(s)?\.html$/.test(window.location.pathname);
+          // sort by pts desc, dg desc, gf desc
+          rows.sort((a,b)=> (b.pts - a.pts) || (b.dg - a.dg) || (b.gf - a.gf) || a.name.localeCompare(b.name));
+
+          const tbody = document.getElementById('tbodyPosicionesNueva'); tbody.innerHTML = '';
+          rows.forEach((r, idx)=>{
+            const tr = document.createElement('tr'); tr.className='tabla-row-neon';
+            if(editMode){
+              tr.innerHTML = `
+                <td>${idx+1}</td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm team-name-input" value="${r.name}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="pj" type="number" value="${r.pj}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="pg" type="number" value="${r.pg}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="pe" type="number" value="${r.pe}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="pp" type="number" value="${r.pp}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="gf" type="number" value="${r.gf}" /></td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="gc" type="number" value="${r.gc}" /></td>
+                <td class="dg-col">${r.dg>0?`+${r.dg}`:r.dg}</td>
+                <td><input data-id="${r.id}" class="form-control form-control-sm stat-input" data-field="pts" type="number" value="${r.pts}" /></td>
+              `;
+            } else {
+              // public view: render read-only cells (no inputs)
+              tr.innerHTML = `
+                <td>${idx+1}</td>
+                <td style="text-align:left;padding-left:0.9em;">${escapeHtml(r.name||'')}</td>
+                <td>${r.pj}</td>
+                <td>${r.pg}</td>
+                <td>${r.pe}</td>
+                <td>${r.pp}</td>
+                <td>${r.gf}</td>
+                <td>${r.gc}</td>
+                <td class="dg-col">${r.dg>0?`+${r.dg}`:r.dg}</td>
+                <td>${r.pts}</td>
+              `;
+            }
+            tbody.appendChild(tr);
+          });
+
+          // attach handlers only in editMode
+          if(editMode){
+            document.querySelectorAll('.team-name-input').forEach(inp=>{
+              inp.addEventListener('change', (e)=>{
+                const id = Number(e.target.dataset.id); const teams = getTeams(); const t = teams.find(x=>x.id===id); if(t){ t.name = e.target.value; saveTeams(teams); }
+              });
+            });
+            document.querySelectorAll('.stat-input').forEach(inp=>{
+              inp.addEventListener('change', (e)=>{
+                const id = Number(e.target.dataset.id); const field = e.target.dataset.field; const val = Number(e.target.value)||0;
+                const manual = getManual(); if(!manual[id]) manual[id] = {};
+                manual[id][field] = val; // update manual override
+                // if modifying pg/pe/pp/pj/gf/gc maybe recompute pts/dg later
+                if(field==='pg' || field==='pe'){
+                  manual[id].pts = (manual[id].pg||0)*3 + (manual[id].pe||0)*1;
+                }
+                saveManual(manual);
+                buildTable();
+              });
+            });
+          }
+        }
+
+        // Recalculate from matches and save to manual
+        function recalcFromMatchesAndSave(){
+          const computed = computeFromMatches();
+          saveManual(computed);
+          buildTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+          ensureInitial();
+          // add recalc button
+          const wrapper = document.querySelector('.tabla-posiciones-float');
+          const editMode = /admin(s)?\.html$/.test(window.location.pathname);
+          const btn = document.createElement('button'); btn.className='btn btn-sm btn-outline-light'; btn.style.margin='8px'; btn.textContent='Recalcular desde partidos';
+          btn.onclick = recalcFromMatchesAndSave; wrapper.insertBefore(btn, wrapper.firstChild);
+          const refresh = document.createElement('button'); refresh.className='btn btn-sm btn-outline-light'; refresh.style.margin='8px'; refresh.textContent='Refrescar'; refresh.onclick = buildTable; wrapper.insertBefore(refresh, wrapper.firstChild);
+          // add Vaciar tabla button only in admin mode
+            if(editMode){
+            const clearBtn = document.createElement('button'); clearBtn.className='btn btn-sm btn-danger'; clearBtn.style.margin='8px'; clearBtn.textContent='Vaciar tabla';
+            clearBtn.onclick = ()=>{
+              if(!confirm('¿Poner puntajes de equipos a 0? Esto reseteará los resultados y estadísticas guardadas localmente.')) return;
+              try{
+                // clear matches and manual overrides but keep teams
+                localStorage.setItem(MATCHES_KEY, JSON.stringify([]));
+                localStorage.setItem(MANUAL_KEY, JSON.stringify({}));
+              }catch(e){ console.error('Error clearing storage:', e); }
+              buildTable();
+              alert('Puntajes reseteados a 0.');
+            };
+            wrapper.insertBefore(clearBtn, wrapper.firstChild);
+          }
+          buildTable();
+        });
+
+        // live update when admin tab changes localStorage
+        window.addEventListener('storage', (e)=>{
+          if([TEAMS_KEY, MATCHES_KEY, MANUAL_KEY].includes(e.key)) buildTable();
+        });
+
       </script>
   <style>
     #tablaPosicionesNueva {
